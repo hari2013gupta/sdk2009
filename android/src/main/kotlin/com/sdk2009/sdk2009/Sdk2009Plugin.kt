@@ -193,7 +193,7 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
                 }
             }
             if (status == "success") {
-                result.success("Success")
+                result.success("Success!!$str")
 
             } else if ("Payment cancelled by user." == paymentCancel || status.contains("failure")) {
                 result.success("Payment cancelled by user")
@@ -211,14 +211,14 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
             if (Activity.RESULT_OK == resultCode || resultCode == 11) {
                 if (data != null) {
                     val trxt = data.getStringExtra("response")
-                    Log.d("UPI", "onActivityResult: $trxt");
+                    Log.d("UPI", "onActivityResult:-------> $trxt");//txnId=&responseCode=00&ApprovalRefNo=null&Status=SUCCESS&txnRef=
 
                     val dataList = ArrayList<String?>()
                     dataList.add(trxt)
 
                     upiPaymentDataOperation(dataList)
                 } else {
-//                    Log.d("UPI", "onActivityResult: " + "Return data is null");
+                    Log.d("UPI", "onActivityResult:-------> " + "Return data is null");
                     val dataList = ArrayList<String?>()
                     dataList.add("nothing")
 

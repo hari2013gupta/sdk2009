@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sdk2009/sdk2009lib.dart';
+import 'package:sdk2009_example/src/ui/upi_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -12,6 +13,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   String _platformVersion = 'Unknown';
   final _sdk2009Plugin = Sdk2009();
+
   @override
   void initState() {
     super.initState();
@@ -44,7 +46,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Plugin example app'),
+        title: const Text('Demo app'),
       ),
       body: Center(
         child: Column(
@@ -54,14 +56,22 @@ class _HomeViewState extends State<HomeView> {
               onPressed: () => _sdk2009Plugin.init(context),
               child: const Text('Button click'),
             ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const UpiView())),
+              child: const Text('Upi View'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const UpiView())),
+              child: const Text('Web View'),
+            ),
             StreamBuilder<String>(
               stream: _sdk2009Plugin.getStreamTimerEvent(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return Text(
-                    '${snapshot.data}',
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  );
+                  return Text('${snapshot.data}',
+                      style: Theme.of(context).textTheme.headlineMedium);
                 } else {
                   return const CircularProgressIndicator();
                 }

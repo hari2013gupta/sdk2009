@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class WebappView extends StatelessWidget {
-  const WebappView({super.key});
+class SmsView extends StatelessWidget {
+  const SmsView({super.key});
 
   @override
   Widget build(BuildContext context) {

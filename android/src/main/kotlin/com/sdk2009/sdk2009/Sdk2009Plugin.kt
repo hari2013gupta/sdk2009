@@ -87,7 +87,7 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
                 IntentUtil.openUpiApp(activityBinding, url!!, packageName!!)
             }
 
-            "getPlatformVersion" -> {
+            "get_platform_version" -> {
                 result.success("Android ${Build.VERSION.RELEASE}")
             }
 

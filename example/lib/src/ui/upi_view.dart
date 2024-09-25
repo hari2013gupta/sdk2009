@@ -7,7 +7,7 @@ class UpiView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _sdk2009plugin = Sdk2009();
+    final sdk2009plugin = Sdk2009();
     String upiResult = '';
     // Platform messages are asynchronous, so we initialize in an async method.
     Future<String?> openUpiIntent() async {
@@ -15,7 +15,7 @@ class UpiView extends StatelessWidget {
       // We also handle the message potentially returning null.
       try {
         upiResult =
-            await _sdk2009plugin.openUpiIntent(demoUpiLink) ?? 'upi failed';
+            await sdk2009plugin.openUpiIntent(demoUpiLink) ?? 'upi failed';
       } on Exception {
         upiResult = 'Failed to open.';
       }
@@ -33,7 +33,7 @@ class UpiView extends StatelessWidget {
             child: const Text('open upi intent'),
           ),
           ElevatedButton(
-            onPressed: () => _sdk2009plugin.getAvailableUpiApps()
+            onPressed: () => sdk2009plugin.getAvailableUpiApps()
                 .then((result) => debugPrint('------app-result---->$result')),
             child: const Text('get installed upi apps'),
           ),

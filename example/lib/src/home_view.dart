@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sdk2009/sdk2009lib.dart';
 import 'package:sdk2009_example/src/upi_meta.dart';
+import 'package:sdk2009_example/src/ui/upi_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -156,6 +157,16 @@ class _HomeViewState extends State<HomeView> {
             ElevatedButton(
               onPressed: () async {},
               child: const Text('===Phone-Pe==='),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const UpiView())),
+              child: const Text('Upi View'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const UpiView())),
+              child: const Text('Web View'),
             ),
             StreamBuilder<String>(
               stream: _sdk2009Plugin.getStreamTimerEvent(),

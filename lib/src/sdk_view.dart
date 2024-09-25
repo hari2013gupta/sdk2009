@@ -1,6 +1,6 @@
 import 'package:events_emitter/events_emitter.dart';
 import 'package:flutter/material.dart';
-import 'package:sdk2009/plugin/sdk2009.dart';
+import 'package:sdk2009/plugin/sdk2009_lib.dart';
 
 class SdkView extends StatefulWidget {
   const SdkView({super.key});
@@ -41,10 +41,8 @@ class _SdkViewState extends State<SdkView> {
               stream: plugin.getStreamTimerEvent(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return Text(
-                    '${snapshot.data}',
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  );
+                  return Text('${snapshot.data}',
+                      style: Theme.of(context).textTheme.headlineMedium);
                 } else {
                   return const CircularProgressIndicator();
                 }

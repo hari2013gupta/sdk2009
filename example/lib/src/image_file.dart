@@ -1,5 +1,5 @@
 class ImageFile {
-  static const base = "lib/src/assets/icons/";
+  static const base = "lib/src/icons/";
 
   static const gpay = "${base}gpay.png";
   static const amazon = "${base}amazon.png";

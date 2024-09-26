@@ -30,6 +30,11 @@ class AppValidation {
       if (!url.startsWith('https://')) {
         throw Exception('Payment url should start with https://');
       }
+
+      final Uri? uri = Uri.tryParse(url);
+      if (uri == null || !uri.hasAbsolutePath) {
+        throw Exception('Please enter valid url');
+      }
       try {
         final uri = Uri.parse(url);
         // Check if the URL scheme is HTTPS and that the URI has a host
@@ -40,28 +45,16 @@ class AppValidation {
         if (uri.host.isEmpty) {
           throw Exception('Empty host');
         }
+        if (!uri.isAbsolute) {
+          throw Exception('Invalid payment url');
+        }
       } on Exception catch (e) {
         // If parsing fails, it's not a valid URL
-        throw Exception(e.toString());
-      }
-      final Uri? uri = Uri.tryParse(url);
-      if (uri == null || !uri.hasAbsolutePath) {
-        throw Exception('Please enter valid url');
-      }
-      final bool validUrl = Uri.tryParse(url)?.hasAbsolutePath ?? false;
-      if (!validUrl) {
-        throw Exception('please enter valid url');
-      }
-
-      if (!Uri.parse(url).isAbsolute) {
-        throw Exception('Invalid payment url');
-      }
-      if (!Uri.parse(url).host.isNotEmpty) {
-        throw Exception('Invalid host');
+        throw Exception('Parse Error: $e');
       }
       // final matches = RegExp(urlPatternA, caseSensitive: false).firstMatch(url);
-      final regExpr = RegExp(urlPatternA, caseSensitive: false);
-      if (!regExpr.hasMatch(url)) {
+      final match = RegExp(urlPatternA, caseSensitive: false);
+      if (!match.hasMatch(url)) {
         throw Exception('Not valid');
       }
       // RegExp regExp = RegExp(urlPatternA);
@@ -69,6 +62,9 @@ class AppValidation {
       //   throw Exception('Validation failed');
       // }
 
+      // if (!url.contains('id')) {
+      //   throw Exception('Payment url should have valid id');
+      // }
     } on Exception catch (e) {
       message = 'Err: $e';
       isValid = false;

@@ -55,12 +55,12 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
 
         // Time Listener Event Channel
         eventChannel = EventChannel(
-            flutterBinding.binaryMessenger, "timeHandlerEvent"
+            flutterBinding.binaryMessenger, "time_handler_event"
         ); // timeHandlerEvent event name
         eventChannel.setStreamHandler(TimeHandler) // TimeHandler is event class
 
         // Location Listener Event Channel
-//        locationEventChannel = EventChannel( binding.binaryMessenger, "locationHandlerEvent"); // timeHandlerEvent event name
+//        locationEventChannel = EventChannel( binding.binaryMessenger, "location_handler_event"); // timeHandlerEvent event name
 //        locationEventChannel.setStreamHandler(LocationHandler) // LocationHandler is event class
     }
 
@@ -81,7 +81,7 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
                 IntentUtil.openUpiIntent(url!!, activityBinding, result)
             }
 
-            "open_upi_app" -> {
+            "launch_upi_app" -> {
                 val url = call.argument<String>("url")
                 val packageName = call.argument<String>("package")
                 IntentUtil.openUpiApp(activityBinding, url!!, packageName!!)

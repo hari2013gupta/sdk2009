@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:sdk2009/plugin/sdk2009_lib.dart';
 
 class SdkView extends StatefulWidget {
-  const SdkView({super.key});
+  final String url;
+
+  const SdkView({super.key, required this.url});
 
   @override
   State<SdkView> createState() => _SdkViewState();
@@ -23,7 +25,7 @@ class _SdkViewState extends State<SdkView> {
 
   void getPlatformVersion() async {
     final pVersion = await plugin.getPlatformVersion();
-    print('------>pver==$pVersion');
+    debugPrint('------>pVer==>$pVersion');
   }
 
   @override

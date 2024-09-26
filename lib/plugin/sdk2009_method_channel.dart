@@ -9,10 +9,11 @@ class MethodChannelSdk2009 extends Sdk2009Platform {
   @visibleForTesting
   final methodChannel = const MethodChannel('sdk2009');
 
-  final timeEventChannel = const EventChannel(
-      'timeHandlerEvent'); // timeHandlerEvent event name . it should be same on android , IOS and Flutter
+  final timeEventChannel = const EventChannel('time_handler_event');
 
-  final locationEventChannel = const EventChannel('locationHandlerEvent');
+  // timeHandlerEvent event name. it should be same on Android, IOS and Flutter
+
+  final locationEventChannel = const EventChannel('location_handler_event');
 
   @override
   Future<String?> getPlatformVersion() async {
@@ -23,13 +24,26 @@ class MethodChannelSdk2009 extends Sdk2009Platform {
 
   @override
   Future<String?> getAvailableUpiApps() async {
-    final result = await methodChannel.invokeMethod<String>('get_available_upi');
+    final result =
+        await methodChannel.invokeMethod<String>('get_available_upi');
     return result;
   }
 
   @override
   Future<String?> openUpiIntent(String url) async {
-    final result = await methodChannel.invokeMethod<String>('native_intent');
+    final result = await methodChannel.invokeMethod<String>(
+      'native_intent',
+      {'url': url},
+    );
+    return result;
+  }
+
+  @override
+  Future<String?> launchUpiIntent(String url, String package) async {
+    final result = await methodChannel.invokeMethod<String>(
+      'launch_upi_app',
+      {'url': url, 'package': package},
+    );
     return result;
   }
 

@@ -35,6 +35,10 @@ abstract class Sdk2009Platform extends PlatformInterface {
     throw UnimplementedError('openUpiIntent(url) has not been implemented.');
   }
 
+  Future<String?> launchUpiIntent(String url, String package) {
+    throw UnimplementedError('launchUpiIntent(url, package) has not been implemented.');
+  }
+
   Stream<String> streamTimeFromNative() {
     throw UnimplementedError('timerFromNative() has not been implemented.');
   }

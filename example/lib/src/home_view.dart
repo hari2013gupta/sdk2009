@@ -1,12 +1,8 @@
-import 'dart:convert';
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sdk2009/sdk2009lib.dart';
-import 'package:sdk2009_example/src/upi_meta.dart';
+import 'package:sdk2009/sdk2009.dart';
 import 'package:sdk2009_example/src/ui/upi_view.dart';
+import 'package:sdk2009_example/src/ui/webapp_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -60,54 +56,6 @@ class _HomeViewState extends State<HomeView> {
   //   });
   // }
 
-  final MethodChannel _methodChannel = const MethodChannel('sdk2009');
-
-  Future<UpiMeta> getAvailableUpiApps() async {
-    try {
-      final version =
-          await _methodChannel.invokeMethod<String>('get_available_upi');
-      log(version.toString());
-
-      if (version != null) {
-        final decode = jsonDecode(version);
-
-        return UpiMeta.fromJson(decode);
-      }
-    } catch (e) {
-      log("GET AVAILABLE UPI APPS EXCEPTION : ${e.toString()}");
-    }
-    return const UpiMeta(data: []);
-  }
-
-  Future<String?> openNativeIntent({required String url}) async {
-    String? result;
-    try {
-      result = await _methodChannel
-          .invokeMethod<String>('native_intent', {'url': url});
-      log('----------->>>>>>$result');
-    } catch (e) {
-      log("OPEN UPI APPS EXCEPTION : ${e.toString()}");
-    }
-    return result ?? '';
-  }
-
-  Future<String> launchApp(
-      {required String package, required String url}) async {
-    String? result;
-    try {
-      result = await _methodChannel.invokeMethod<String>(
-        'open_upi_app',
-        {'package': package, 'url': url},
-      );
-      log(result.toString());
-    } catch (e) {
-      log("OPEN UPI APPS EXCEPTION : ${e.toString()}");
-    }
-    return result ?? '';
-  }
-
-  List<UpiObject> upiAppsListAndroid = [];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,24 +67,14 @@ class _HomeViewState extends State<HomeView> {
           children: [
             Text('Running on: $_platformVersion\n'),
             ElevatedButton(
-              onPressed: () async {
-                // _sdk2009Plugin.init(context);
-                // final apps =  await getAvailableUpiApps();
-                // upiAppsListAndroid = apps.data;
-                // log('--------appslist----->>>> ${upiAppsListAndroid.length}');
-                openNativeIntent(
-                    url: 'upi://pay?pa=112233220@ibl&pn=Harry&cu=INR');
-                // launchApp(package: package, url: url);
-              },
-              child: const Text('Button click'),
-            ),
-            ElevatedButton(
-              onPressed: () async {},
+              onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const WebappView())),
               child: const Text('WebView App'),
             ),
             ElevatedButton(
-              onPressed: () async {},
-              child: const Text('UPI App'),
+              onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const UpiView())),
+              child: const Text('UPI View'),
             ),
             ElevatedButton(
               onPressed: () async {},
@@ -157,16 +95,6 @@ class _HomeViewState extends State<HomeView> {
             ElevatedButton(
               onPressed: () async {},
               child: const Text('===Phone-Pe==='),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const UpiView())),
-              child: const Text('Upi View'),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const UpiView())),
-              child: const Text('Web View'),
             ),
             StreamBuilder<String>(
               stream: _sdk2009Plugin.getStreamTimerEvent(),

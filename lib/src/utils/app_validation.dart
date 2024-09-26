@@ -7,11 +7,11 @@ library;
 
 import 'dart:developer';
 
-import 'package:sdk2009_example/src/utils/tuple.dart';
+import 'package:sdk2009/src/utils/tuple.dart';
 
-class EpayValidation {
+class AppValidation {
   final urlPatternA =
-      r"(https?)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
+      r"(https)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
   String urlPatternB =
       r'^((?:.|\n)*?)((https:\/\/www\.|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?)';
   final urlPatternC =
@@ -40,9 +40,9 @@ class EpayValidation {
         if (uri.host.isEmpty) {
           throw Exception('Empty host');
         }
-      } catch (e) {
+      } on Exception catch (e) {
         // If parsing fails, it's not a valid URL
-        throw Exception('Url should not be empty');
+        throw Exception(e.toString());
       }
       final Uri? uri = Uri.tryParse(url);
       if (uri == null || !uri.hasAbsolutePath) {
@@ -60,18 +60,15 @@ class EpayValidation {
         throw Exception('Invalid host');
       }
       // final matches = RegExp(urlPatternA, caseSensitive: false).firstMatch(url);
-      final match = RegExp(urlPatternA, caseSensitive: false);
-      if (!match.hasMatch(url)) {
+      final regExpr = RegExp(urlPatternA, caseSensitive: false);
+      if (!regExpr.hasMatch(url)) {
         throw Exception('Not valid');
       }
-      RegExp regExp = RegExp(urlPatternA);
-      if (!regExp.hasMatch(url)) {
-        throw Exception('Validation failed');
-      }
+      // RegExp regExp = RegExp(urlPatternA);
+      // if (!regExp.hasMatch(url)) {
+      //   throw Exception('Validation failed');
+      // }
 
-      if (!url.contains('id')) {
-        throw Exception('Payment url should contains Payment ID');
-      }
     } on Exception catch (e) {
       message = 'Err: $e';
       isValid = false;

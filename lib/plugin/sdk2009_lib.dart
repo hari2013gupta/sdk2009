@@ -12,8 +12,13 @@ class Sdk2009 {
     return Sdk2009Platform.instance.getAvailableUpiApps();
   }
 
-  Future<String?> openUpiIntent(String url) {
+  Future<String?> openUpiIntent({required String url}) {
     return Sdk2009Platform.instance.openUpiIntent(url);
+  }
+
+  Future<String?> launchUpiIntent(
+      {required String url, required String package}) {
+    return Sdk2009Platform.instance.launchUpiIntent(url, package);
   }
 
   Stream<String> getStreamTimerEvent() {
@@ -32,9 +37,9 @@ class Sdk2009 {
     return Sdk2009Platform.instance.getSmsFromNative();
   }
 
-  void init(BuildContext context) {
+  void init({required BuildContext context, required String paymentUrl}) {
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => const SdkLoader(),
+      builder: (context) => SdkLoader(url: paymentUrl),
     ));
   }
 }

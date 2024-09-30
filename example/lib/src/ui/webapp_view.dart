@@ -12,7 +12,7 @@ class WebappView extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () =>
-              plugin.init(context: context, paymentUrl: defaultWebUrl),
+              plugin.init(context: context, paymentUrl: pmCaresUrl),
           child: const Text('Pay Now'),
         ),
       ),

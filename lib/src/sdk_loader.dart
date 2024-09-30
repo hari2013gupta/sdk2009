@@ -11,11 +11,8 @@ class SdkLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future.delayed(const Duration(seconds: 2), () {
-      debugPrint('----->>>>>>> start loading sdk...');// Todo: Url validation and Network check here
-      Tuple result = AppValidation().isValidUrl(url);
-      debugPrint('----->>>>>>> Validation Result >>>>>>${result.x}:${result.y}');
-
-      if(!result.x){
+      Tuple validationResult = AppValidation().isValidUrl(url);
+      if(!validationResult.x) {
         Navigator.of(context).pop();
         return;
       }

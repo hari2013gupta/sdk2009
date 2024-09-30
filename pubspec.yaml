@@ -11,6 +11,7 @@ dependencies:
   events_emitter: ^0.5.2
   flutter:
     sdk: flutter
+  path_provider: ^2.1.4
   plugin_platform_interface: ^2.0.2
   webview_flutter: ^4.8.0
 

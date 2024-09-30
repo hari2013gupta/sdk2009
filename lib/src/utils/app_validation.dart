@@ -21,7 +21,7 @@ class AppValidation {
   ///
   Tuple isValidUrl(String url) {
     bool isValid = true;
-    String message = '';
+    String message = 'VALIDATION_SUCCESS';
 
     try {
       if (url.isEmpty) {
@@ -70,9 +70,10 @@ class AppValidation {
       // }
 
     } on Exception catch (e) {
-      message = 'Err: $e';
+      message = 'VALIDATION_FAILED: $e';
       isValid = false;
     }
+    message = '${DateTime.now()} :: $message';
     log('Validation : $message');
     // Tuple<bool, String> tuple = Tuple(isValid, message);
     return Tuple(isValid, message);

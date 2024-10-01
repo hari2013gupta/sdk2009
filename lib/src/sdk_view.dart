@@ -28,7 +28,7 @@ class _SdkViewState extends State<SdkView> {
     events.on('message', (int data) => print('Integer: $data'));
     getPlatformVersion();
 
-    // initiateWebViewController();
+    initiateWebViewController();
   }
 
   void initiateWebViewController() {
@@ -85,7 +85,7 @@ class _SdkViewState extends State<SdkView> {
           },
           onNavigationRequest: (NavigationRequest request) {
             debugPrint('NavigationRequest :: ${request.url}');
-            if (request.url.startsWith('https://pmcares.gov.in/')) {
+            if (request.url.startsWith('https://google.gov.in/')) {
               return NavigationDecision.prevent;
             }
             return NavigationDecision.navigate;
@@ -116,7 +116,8 @@ class _SdkViewState extends State<SdkView> {
 
   @override
   Widget build(BuildContext context) {
-    initiateWebViewController();
+    // initiateWebViewController();
+    showToast();
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -159,5 +160,9 @@ class _SdkViewState extends State<SdkView> {
   Future<void> pageFinishedCallback(s) async {
     isLoading = false;
     Future.delayed(Duration.zero, () => Navigator.of(context).pop(s));
+  }
+
+  void showToast() {
+    plugin.showNativeToast();
   }
 }

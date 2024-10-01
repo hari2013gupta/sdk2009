@@ -3,6 +3,7 @@ package com.sdk2009.sdk2009
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -10,7 +11,6 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry
 
 import java.util.*
-import io.flutter.plugin.common.EventChannel
 import java.text.SimpleDateFormat
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -18,12 +18,14 @@ import android.content.Context
 import android.content.Intent
 import android.location.LocationListener
 import android.location.LocationManager
+import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.widget.Toast
 import com.sdk2009.sdk2009.util.IntentUtil
 
 /** Sdk2009Plugin
@@ -46,10 +48,13 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     private lateinit var eventChannel: EventChannel
 //    private lateinit var locationEventChannel: EventChannel
 
+    private lateinit var activity: Activity
     private lateinit var activityBinding: ActivityPluginBinding
+    private lateinit var contextBinding: Context
     private lateinit var result: Result
 
     override fun onAttachedToEngine(flutterBinding: FlutterPlugin.FlutterPluginBinding) {
+        this.contextBinding = flutterBinding.applicationContext
         channel = MethodChannel(flutterBinding.binaryMessenger, "sdk2009")
         channel.setMethodCallHandler(this)
 
@@ -66,19 +71,36 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
 
     override fun onAttachedToActivity(activityBinding: ActivityPluginBinding) {
         this.activityBinding = activityBinding
+        this.activity = activityBinding.activity
+//        contextBinding = this.activityBinding.applicationContext
         activityBinding.addActivityResultListener(this)
     }
 
     override fun onMethodCall(call: MethodCall, callResult: Result) {
         result = callResult
         when (call.method) {
+
+            "native_toast" -> {
+                val args = call.arguments as Map<String, String>
+                val msg = args["toast_msg"]
+                Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
+                result.success("OK")
+            }
+
+            "playAlertSound" -> {
+//                val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+//                val ringTone =
+//                    RingtoneManager.getRingtone(this.activityBinding, notification)
+//                ringTone.play()
+                result.success(null)
+            }
             "get_available_upi" -> {
-                callResult.success(IntentUtil.getUpiAppList(activityBinding.activity.applicationContext))
+                callResult.success(IntentUtil.getUpiAppList(this.activityBinding.activity.applicationContext))
             }
 
             "native_intent" -> {
                 val url = call.argument<String>("url")
-                IntentUtil.openUpiIntent(url!!, activityBinding, result)
+                IntentUtil.openUpiIntent(url!!, this.activityBinding, result)
             }
 
             "launch_upi_app" -> {
@@ -211,7 +233,10 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
             if (Activity.RESULT_OK == resultCode || resultCode == 11) {
                 if (data != null) {
                     val trxt = data.getStringExtra("response")
-                    Log.d("UPI", "onActivityResult:-------> $trxt");//txnId=&responseCode=00&ApprovalRefNo=null&Status=SUCCESS&txnRef=
+                    Log.d(
+                        "UPI",
+                        "onActivityResult:-------> $trxt"
+                    );//txnId=&responseCode=00&ApprovalRefNo=null&Status=SUCCESS&txnRef=
 
                     val dataList = ArrayList<String?>()
                     dataList.add(trxt)

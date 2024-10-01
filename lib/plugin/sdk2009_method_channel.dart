@@ -16,6 +16,12 @@ class MethodChannelSdk2009 extends Sdk2009Platform {
   final locationEventChannel = const EventChannel('location_handler_event');
 
   @override
+  Future<String?> showNativeToast() async {
+    final result = await methodChannel.invokeMethod<String>('native_toast');
+    return result;
+  }
+
+  @override
   Future<String?> getPlatformVersion() async {
     final version =
         await methodChannel.invokeMethod<String>('get_platform_version');

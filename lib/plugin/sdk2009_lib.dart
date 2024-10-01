@@ -4,6 +4,10 @@ import 'package:sdk2009/src/sdk_loader.dart';
 import 'sdk2009_platform_interface.dart';
 
 class Sdk2009 {
+  Future<String?> showNativeToast() {
+    return Sdk2009Platform.instance.showNativeToast();
+  }
+
   Future<String?> getPlatformVersion() {
     return Sdk2009Platform.instance.getPlatformVersion();
   }

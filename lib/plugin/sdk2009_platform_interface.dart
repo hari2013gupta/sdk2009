@@ -23,6 +23,10 @@ abstract class Sdk2009Platform extends PlatformInterface {
     _instance = instance;
   }
 
+  Future<String?> showNativeToast() {
+    throw UnimplementedError('nativeToast() has not been implemented.');
+  }
+
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
@@ -36,7 +40,8 @@ abstract class Sdk2009Platform extends PlatformInterface {
   }
 
   Future<String?> launchUpiIntent(String url, String package) {
-    throw UnimplementedError('launchUpiIntent(url, package) has not been implemented.');
+    throw UnimplementedError(
+        'launchUpiIntent(url, package) has not been implemented.');
   }
 
   Stream<String> streamTimeFromNative() {

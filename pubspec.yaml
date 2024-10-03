@@ -8,6 +8,8 @@ environment:
   flutter: '>=3.3.0'
 
 dependencies:
+  connectivity_plus: ^6.0.5
+  device_info_plus: ^10.1.2
   events_emitter: ^0.5.2
   flutter:
     sdk: flutter

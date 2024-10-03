@@ -12,25 +12,28 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  String _platformVersion = 'Unknown';
+  String _platformInfo = 'Unknown';
   final _sdk2009Plugin = Sdk2009();
+  late final smsCTR;
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    smsCTR = TextEditingController();
+    getPlatformInfo();
+    listenVerificationCodeFromNative();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
+  Future<void> getPlatformInfo() async {
+    String platformInfo;
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
-      platformVersion = await _sdk2009Plugin.getPlatformVersion() ??
-          'Unknown platform version';
+      platformInfo =
+          await _sdk2009Plugin.getPlatformInfo() ?? 'Unknown platform info';
     } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
+      platformInfo = 'Failed to get platform info.';
     }
 
     // If the widget was removed from the tree while the asynchronous platform
@@ -39,8 +42,26 @@ class _HomeViewState extends State<HomeView> {
     if (!mounted) return;
 
     setState(() {
-      _platformVersion = platformVersion;
+      _platformInfo = platformInfo;
     });
+  }
+
+  void listenVerificationCodeFromNative() {
+    try {
+      _sdk2009Plugin.getMethodChannel().setMethodCallHandler((call) async {
+        // Get hear method and passed arguments with method
+        debugPrint('Listener :: MethodInvoked: ${call.method}');
+        switch (call.method) {
+          case "android_sms_consent":
+            smsCTR.text = call.arguments;
+            break;
+          default:
+            break;
+        }
+      });
+    } on PlatformException catch (e) {
+      debugPrint('Error: ${e.message}');
+    }
   }
 
   // void _handleLocationChanges() {
@@ -65,7 +86,7 @@ class _HomeViewState extends State<HomeView> {
       body: Center(
         child: Column(
           children: [
-            Text('Running on: $_platformVersion\n'),
+            Text(_platformInfo),
             ElevatedButton(
               onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => const WebappView())),
@@ -77,7 +98,10 @@ class _HomeViewState extends State<HomeView> {
               child: const Text('UPI View'),
             ),
             ElevatedButton(
-              onPressed: () async {},
+              onPressed: () async {
+                final boomerang = await _sdk2009Plugin.getBoomerang();
+                debugPrint(boomerang);
+              },
               child: const Text('===Razorpay==='),
             ),
             ElevatedButton(
@@ -96,6 +120,9 @@ class _HomeViewState extends State<HomeView> {
               onPressed: () async {},
               child: const Text('===Phone-Pe==='),
             ),
+            const Spacer(),
+            const Divider(),
+            TextField(controller: smsCTR),
             StreamBuilder<String>(
               stream: _sdk2009Plugin.getStreamTimerEvent(),
               builder: (context, snapshot) {

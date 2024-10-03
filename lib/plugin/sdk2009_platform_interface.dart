@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'sdk2009_method_channel.dart';
@@ -23,11 +24,14 @@ abstract class Sdk2009Platform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> showNativeToast() {
+  MethodChannel getMethodChannel() {
+    throw UnimplementedError('methodChannel() has not been implemented.');
+  }
+  Future<String?> showNativeToast(String msg) {
     throw UnimplementedError('nativeToast() has not been implemented.');
   }
 
-  Future<String?> getPlatformVersion() {
+  Future<String?> getPlatformInfo() {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
@@ -56,7 +60,7 @@ abstract class Sdk2009Platform extends PlatformInterface {
     throw UnimplementedError('networkFromNative() has not been implemented.');
   }
 
-  Stream<String> getSmsFromNative() {
-    throw UnimplementedError('smsFromNative() has not been implemented.');
+  Future<String?> getBoomerang() {
+    throw UnimplementedError('boomerang() has not been implemented.');
   }
 }

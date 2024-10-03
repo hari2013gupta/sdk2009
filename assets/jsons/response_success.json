@@ -1,0 +1,15 @@
+{
+  "meta": {
+    "responseCode": "200",
+    "responseMessage": "Success",
+    "errorMessage": ""
+  },
+  "data": {
+    "orderId": "241963340477545BxRtB",
+    "amount": 1000.50,
+    "status": "created",
+    "paymentURL": "https://ok.com?id=a1a96e6576e6f7058ee",
+    "attempts": 0,
+    "createdAt": 1723875309337
+  }
+}

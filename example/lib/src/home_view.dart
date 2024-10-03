@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sdk2009/sdk2009lib.dart';
+import 'package:sdk2009/sdk2009.dart';
+import 'package:sdk2009_example/src/ui/upi_view.dart';
+import 'package:sdk2009_example/src/ui/webapp_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -12,6 +14,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   String _platformVersion = 'Unknown';
   final _sdk2009Plugin = Sdk2009();
+
   @override
   void initState() {
     super.initState();
@@ -40,19 +43,58 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 
+  // void _handleLocationChanges() {
+  //   const EventChannel _stream = EventChannel('locationHandlerEvent');
+  //
+  //   bool? _locationStatusChanged;
+  //   _stream.receiveBroadcastStream().listen((onData) {
+  //     _locationStatusChanged = onData;
+  //     print("LOCATION ACCESS IS NOW ${onData ? 'On' : 'Off'}");
+  //     if (onData == false) {
+  //       // Request Permission Access
+  //     }
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Plugin example app'),
+        title: const Text('Demo app'),
       ),
       body: Center(
         child: Column(
           children: [
             Text('Running on: $_platformVersion\n'),
             ElevatedButton(
-              onPressed: () => _sdk2009Plugin.init(context),
-              child: const Text('Button click'),
+              onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const WebappView())),
+              child: const Text('WebView App'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const UpiView())),
+              child: const Text('UPI View'),
+            ),
+            ElevatedButton(
+              onPressed: () async {},
+              child: const Text('===Razorpay==='),
+            ),
+            ElevatedButton(
+              onPressed: () async {},
+              child: const Text('===Stripe==='),
+            ),
+            ElevatedButton(
+              onPressed: () async {},
+              child: const Text('===Pay-U==='),
+            ),
+            ElevatedButton(
+              onPressed: () async {},
+              child: const Text('===Google-Pay==='),
+            ),
+            ElevatedButton(
+              onPressed: () async {},
+              child: const Text('===Phone-Pe==='),
             ),
             StreamBuilder<String>(
               stream: _sdk2009Plugin.getStreamTimerEvent(),
@@ -60,7 +102,7 @@ class _HomeViewState extends State<HomeView> {
                 if (snapshot.hasData) {
                   return Text(
                     '${snapshot.data}',
-                    style: Theme.of(context).textTheme.headlineMedium,
+                    style: Theme.of(context).textTheme.displayLarge,
                   );
                 } else {
                   return const CircularProgressIndicator();

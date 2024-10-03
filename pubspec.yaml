@@ -8,9 +8,12 @@ environment:
   flutter: '>=3.3.0'
 
 dependencies:
+  connectivity_plus: ^6.0.5
+  device_info_plus: ^10.1.2
   events_emitter: ^0.5.2
   flutter:
     sdk: flutter
+  path_provider: ^2.1.4
   plugin_platform_interface: ^2.0.2
   webview_flutter: ^4.8.0
 
@@ -43,7 +46,9 @@ flutter:
         pluginClass: Sdk2009Plugin
 
   # To add assets to your plugin package, add an assets section, like this:
-  # assets:
+  assets:
+    - assets/images/
+    - assets/icons/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   #

@@ -23,11 +23,40 @@ abstract class Sdk2009Platform extends PlatformInterface {
     _instance = instance;
   }
 
+  Future<String?> showNativeToast() {
+    throw UnimplementedError('nativeToast() has not been implemented.');
+  }
+
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
+  Future<String?> getAvailableUpiApps() {
+    throw UnimplementedError('availableUpiApps() has not been implemented.');
+  }
+
+  Future<String?> openUpiIntent(String url) {
+    throw UnimplementedError('openUpiIntent(url) has not been implemented.');
+  }
+
+  Future<String?> launchUpiIntent(String url, String package) {
+    throw UnimplementedError(
+        'launchUpiIntent(url, package) has not been implemented.');
+  }
+
   Stream<String> streamTimeFromNative() {
     throw UnimplementedError('timerFromNative() has not been implemented.');
+  }
+
+  Stream<String> streamLocationFromNative() {
+    throw UnimplementedError('locationFromNative() has not been implemented.');
+  }
+
+  Stream<String> getNetworkFromNative() {
+    throw UnimplementedError('networkFromNative() has not been implemented.');
+  }
+
+  Stream<String> getSmsFromNative() {
+    throw UnimplementedError('smsFromNative() has not been implemented.');
   }
 }

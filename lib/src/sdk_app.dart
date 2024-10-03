@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:sdk2009/src/sdk_view.dart';
 
 class SdkApp extends StatelessWidget {
-  const SdkApp({super.key});
+  final String url;
+
+  const SdkApp({super.key, required this.url});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: SdkView());
+    return  MaterialApp(
+        title: 'SDK2009', debugShowMaterialGrid: true, home: SdkView(url: url));
   }
 }

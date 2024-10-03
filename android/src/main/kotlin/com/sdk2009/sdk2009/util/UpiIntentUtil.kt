@@ -6,13 +6,18 @@ import android.content.Intent
 import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Build
+import android.util.Log
+import com.sdk2009.sdk2009.Sdk2009Plugin.Companion.REQ_UPI_INTENT
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.MethodChannel
 import org.json.JSONArray
 import org.json.JSONObject
+import java.util.ArrayList
+import java.util.Locale
 
 
-class IntentUtil {
+class UpiIntentUtil {
 
     companion object {
         fun openUpiIntent(
@@ -20,7 +25,7 @@ class IntentUtil {
         ) {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             if (intent.resolveActivity(activityBinding.activity.packageManager) != null) {
-                activityBinding.activity.startActivityForResult(intent, 121)
+                activityBinding.activity.startActivityForResult(intent, REQ_UPI_INTENT)
             } else {
 //            Toast.makeText(activity.activity, "Please make sure you've installed UPI apps", Toast.LENGTH_LONG).show()
                 result.success("Please make sure you've installed UPI apps")
@@ -33,12 +38,12 @@ class IntentUtil {
             intent.action = Intent.ACTION_VIEW
             intent.setPackage(packageName)
             intent.data = Uri.parse(data)
-            activityBinding.activity.startActivityForResult(intent, 121)
+            activityBinding.activity.startActivityForResult(intent, REQ_UPI_INTENT)
         }
 
         fun getUpiAppList(context: Context): String {
 
-            val uriBuilder:Uri.Builder =  Uri.Builder();
+            val uriBuilder: Uri.Builder = Uri.Builder();
             uriBuilder.scheme("upi").authority("pay");
             uriBuilder.appendQueryParameter("pa", "test@ybl");
             uriBuilder.appendQueryParameter("pn", "Test");
@@ -59,11 +64,18 @@ class IntentUtil {
 
             for (i in pkgAppsList.indices) {
                 val resolveInfo = pkgAppsList[i] as ResolveInfo
-                if (!isWhatsapp(resolveInfo.activityInfo.packageName) && isAppUpiReady(resolveInfo.activityInfo.packageName, context)) {
+                if (!isWhatsapp(resolveInfo.activityInfo.packageName) && isAppUpiReady(
+                        resolveInfo.activityInfo.packageName,
+                        context
+                    )
+                ) {
                     val obj = JSONObject()
                     obj.put("name", resolveInfo.loadLabel(packageManager).toString())
                     obj.put("package_name", resolveInfo.activityInfo.packageName)
-                    obj.put("icon", Common.getBitmapFromDrawable(resolveInfo.loadIcon(packageManager)))
+                    obj.put(
+                        "icon",
+                        Common.getBitmapFromDrawable(resolveInfo.loadIcon(packageManager))
+                    )
 
                     application.put(obj)
                 }
@@ -87,10 +99,50 @@ class IntentUtil {
 //        val upiIntent = Intent(Intent.ACTION_VIEW, Uri.parse("upi://mandate?pa=112233220@ipl&pn=OK%20TECHNOLOGIES&tr=EZM2023070112223506269543&am=2000.00 &cu=INR&orgid=400011&mc=5818&purpose=14&tn=Mandate%20for%20Sound%20box&validitystart=01072023&validityend=01072053&amrule=MAX&recur=ASPRESENTED&rev=Y&share=Y&block=N&txnType=CREATE&mode=13"))
             val pm = context.packageManager
             val upiActivities: List<ResolveInfo> = pm.queryIntentActivities(upiIntent, 0)
-            for (a in upiActivities){
+            for (a in upiActivities) {
                 if (a.activityInfo.packageName == packageName) appUpiReady = true
             }
             return appUpiReady
+        }
+
+        /* upi operation send result
+        * */
+        internal fun upiPaymentDataOperation(result: Result, data: ArrayList<String?>) {
+            try {
+                var str = data[0]
+                var paymentCancel = ""
+                if (str == null) str = "discard"
+                var status = ""
+                var approvalRefNo = ""
+                val response = str.split("&".toRegex()).toTypedArray()
+                Log.i("PASSED ARRAY", data.toString())
+                for (i in response.indices) {
+                    val equalStr = response[i].split("=".toRegex()).toTypedArray()
+                    if (equalStr.size >= 2) {
+                        if (equalStr[0].equals("Status", ignoreCase = true)) {
+                            status = equalStr[1].lowercase(Locale.getDefault())
+                        } else if (equalStr[0].equals(
+                                "ApprovalRefNo",
+                                ignoreCase = true
+                            ) || equalStr[0].equals("txnRef", ignoreCase = true)
+                        ) {
+                            approvalRefNo = equalStr[1]
+                        }
+                    } else {
+                        paymentCancel = "Payment cancelled by user."
+                    }
+                }
+                if (status == "success") {
+                    result.success("Success!!$str")
+
+                } else if ("Payment cancelled by user." == paymentCancel || status.contains("failure")) {
+                    result.success("Payment cancelled by user")
+                } else {
+                    result.success("Transaction failed.Please try again")
+                }
+            } catch (e: Exception) {
+                Log.i("Exception Native", e.toString())
+            }
         }
     }
 }

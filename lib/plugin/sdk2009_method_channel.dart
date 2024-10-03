@@ -9,30 +9,32 @@ class MethodChannelSdk2009 extends Sdk2009Platform {
   @visibleForTesting
   final methodChannel = const MethodChannel('sdk2009');
 
+  // timeHandlerEvent event name. it should be same on Android, IOS and Flutter
   final timeEventChannel = const EventChannel('time_handler_event');
 
-  // timeHandlerEvent event name. it should be same on Android, IOS and Flutter
-
+  // locationHandlerEvent event name. it should be same on Android, IOS and Flutter
   final locationEventChannel = const EventChannel('location_handler_event');
 
   @override
-  Future<String?> showNativeToast() async {
-    final result = await methodChannel.invokeMethod<String>('native_toast');
-    return result;
+  MethodChannel getMethodChannel() {
+    return methodChannel;
   }
 
   @override
-  Future<String?> getPlatformVersion() async {
-    final version =
-        await methodChannel.invokeMethod<String>('get_platform_version');
-    return version;
+  Future<String?> showNativeToast(String msg) async {
+    return await methodChannel
+        .invokeMethod<String>('native_toast', {'msg': msg});
+  }
+
+  @override
+  Future<String?> getPlatformInfo() async {
+    final info = await methodChannel.invokeMethod<String>('get_platform_info');
+    return info;
   }
 
   @override
   Future<String?> getAvailableUpiApps() async {
-    final result =
-        await methodChannel.invokeMethod<String>('get_available_upi');
-    return result;
+    return await methodChannel.invokeMethod<String>('get_available_upi');
   }
 
   @override
@@ -51,6 +53,12 @@ class MethodChannelSdk2009 extends Sdk2009Platform {
       {'url': url, 'package': package},
     );
     return result;
+  }
+
+  @override
+  Future<String?> getBoomerang() async {
+    return await methodChannel
+        .invokeMethod<String>('android_sms_consent', {'code': 'Boomerang'});
   }
 
   @override

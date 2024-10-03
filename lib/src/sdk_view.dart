@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:events_emitter/events_emitter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sdk2009/plugin/sdk2009_lib.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -65,7 +66,16 @@ class _SdkViewState extends State<SdkView> {
           '== JS Console == ${consoleMessage.level.name}: ${consoleMessage.message}');
     });
     wController
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+    // ..loadFile(absoluteFilePath)
+      ..loadRequest(
+        Uri.parse(finalUrl),
+        // headers: {
+        //   "referer": "https://transaction.jsp",
+        //   "origin": "https://",
+        //   // "referer": "https:transaction.jsp"
+        // },
+      )
+    ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
       ..setNavigationDelegate(
         NavigationDelegate(
@@ -91,19 +101,11 @@ class _SdkViewState extends State<SdkView> {
             return NavigationDecision.navigate;
           },
         ),
-      )
-      ..loadRequest(
-        Uri.parse(finalUrl),
-        // headers: {
-        //   "referer": "https://transaction.jsp",
-        //   "origin": "https://",
-        //   // "referer": "https:transaction.jsp"
-        // },
       );
   }
 
   void getPlatformVersion() async {
-    final pVersion = await plugin.getPlatformVersion();
+    final pVersion = await plugin.getPlatformInfo();
     debugPrint('------>pVer==>$pVersion');
   }
 
@@ -117,7 +119,6 @@ class _SdkViewState extends State<SdkView> {
   @override
   Widget build(BuildContext context) {
     // initiateWebViewController();
-    showToast();
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -162,7 +163,25 @@ class _SdkViewState extends State<SdkView> {
     Future.delayed(Duration.zero, () => Navigator.of(context).pop(s));
   }
 
-  void showToast() {
-    plugin.showNativeToast();
+  void listenVerificationCodeFromNative() {
+    try {
+      plugin.getMethodChannel().setMethodCallHandler((call) async {
+        // Get hear method and passed arguments with method
+        debugPrint('Listener :: MethodInvoked: ${call.method}');
+        switch (call.method) {
+          case "android_sms_consent":
+            // smsCTR.text = call.arguments;
+            break;
+          default:
+            break;
+        }
+      });
+    } on PlatformException catch (e) {
+      debugPrint('Error: ${e.message}');
+    }
+  }
+
+  void showToast({required String msg}) {
+    plugin.showNativeToast(msg);
   }
 }

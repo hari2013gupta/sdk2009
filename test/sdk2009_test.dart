@@ -66,6 +66,6 @@ void main() {
     MockSdk2009Platform fakePlatform = MockSdk2009Platform();
     Sdk2009Platform.instance = fakePlatform;
 
-    expect(await sdk2009Plugin.getPlatformVersion(), '42');
+    expect(await sdk2009Plugin.getPlatformInfo(), '42');
   });
 }

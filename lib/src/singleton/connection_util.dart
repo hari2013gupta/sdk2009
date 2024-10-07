@@ -5,6 +5,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 
 class ConnectionUtil {
   static final ConnectionUtil _instance = ConnectionUtil._singleton();
+
   ConnectionUtil._singleton();
 
   static ConnectionUtil getInstance() => _instance;
@@ -12,6 +13,7 @@ class ConnectionUtil {
   bool hasConnection = false;
 
   StreamController connectionChangeController = StreamController();
+
   Stream get connectionChange => connectionChangeController.stream;
 
   final Connectivity _connectivity = Connectivity();
@@ -24,24 +26,36 @@ class ConnectionUtil {
     _hasInternetConnection();
   }
 
-  Future<bool> _hasInternetConnection() async {
-    bool previousConnection = hasConnection;
-    var connectiionList = await _connectivity.checkConnectivity();
-    for (var connection in connectiionList) {
+  Future<bool> checkInternetConnection() async {
+    var connectionList = await _connectivity.checkConnectivity();
+    for (var connection in connectionList) {
       switch (connection) {
         case ConnectivityResult.mobile:
-          hasConnection = true;
-          break;
+          return true;
         case ConnectivityResult.wifi:
-          hasConnection = true;
+          return true;
+        case ConnectivityResult.none:
+          log('=======No internet connection');
+          return false;
         default:
-          hasConnection = false;
+          break;
       }
     }
+      // this is the different
+      if (connectionList.isNotEmpty) {
+        log('=======Internet is connected with any of connection method');
+      }
+    return false;
+  }
+
+  Future<bool> _hasInternetConnection() async {
+    bool previousConnection = hasConnection;
+    var connectionList = await _connectivity.checkConnectivity();
+    hasConnection = await checkInternetConnection();
     if (hasConnection) {
       // this is the different
-      if (connectiionList.isNotEmpty) {
-        log('=======Internet is connected with any of connection medium');
+      if (connectionList.isNotEmpty) {
+        log('=======Internet is connected with any of connection method');
       }
     }
     if (previousConnection != hasConnection) {

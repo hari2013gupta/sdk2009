@@ -4,6 +4,7 @@ import 'package:events_emitter/events_emitter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sdk2009/plugin/sdk2009_lib.dart';
+import 'package:sdk2009/src/utils/app_assets.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class SdkView extends StatefulWidget {
@@ -31,9 +32,9 @@ class _SdkViewState extends State<SdkView> {
 
     initiateWebViewController();
   }
-
-  void initiateWebViewController() {
+  void initiateWebViewController() async {
     String finalUrl = widget.url;
+    final indexHtml = await loadIndexHtml();
 
     wController.addJavaScriptChannel(
       'Payment',
@@ -66,15 +67,15 @@ class _SdkViewState extends State<SdkView> {
           '== JS Console == ${consoleMessage.level.name}: ${consoleMessage.message}');
     });
     wController
-    // ..loadFile(absoluteFilePath)
-      ..loadRequest(
-        Uri.parse(finalUrl),
+    ..loadFile(indexHtml)
+      // ..loadRequest(
+      //   Uri.parse(finalUrl),
         // headers: {
         //   "referer": "https://transaction.jsp",
         //   "origin": "https://",
         //   // "referer": "https:transaction.jsp"
         // },
-      )
+      // )
     ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
       ..setNavigationDelegate(

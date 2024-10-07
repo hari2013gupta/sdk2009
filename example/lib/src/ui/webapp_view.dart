@@ -11,8 +11,11 @@ class WebappView extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: ElevatedButton(
-          onPressed: () =>
-              plugin.init(context: context, paymentUrl: sbiCardUrl),
+          onPressed: () async {
+              // final result = 
+              plugin.init(context: context, paymentUrl: sbiCardUrl);
+              // debugPrint('================>result=>$result');
+          },
           child: const Text('Pay Now'),
         ),
       ),

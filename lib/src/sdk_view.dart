@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:events_emitter/events_emitter.dart';
 import 'package:flutter/material.dart';
@@ -32,9 +33,12 @@ class _SdkViewState extends State<SdkView> {
 
     initiateWebViewController();
   }
+
   void initiateWebViewController() async {
-    String finalUrl = widget.url;
-    final indexHtml = await loadIndexHtml();
+    // String finalUrl = widget.url;
+    // debugPrint('===============>indexHtml<===========');
+    // final indexHtml = await loadIndexHtml();
+    // debugPrint(indexHtml);
 
     wController.addJavaScriptChannel(
       'Payment',
@@ -66,17 +70,21 @@ class _SdkViewState extends State<SdkView> {
       debugPrint(
           '== JS Console == ${consoleMessage.level.name}: ${consoleMessage.message}');
     });
+    // File myAssetFile = File("assets/web/index.html");
+
     wController
-    ..loadFile(indexHtml)
+      // ..loadFile(myAssetFile.path)
+      // ..loadFile(indexHtml)
+      ..loadFlutterAsset('assets/web/index.html')
       // ..loadRequest(
       //   Uri.parse(finalUrl),
-        // headers: {
-        //   "referer": "https://transaction.jsp",
-        //   "origin": "https://",
-        //   // "referer": "https:transaction.jsp"
-        // },
+      //   headers: {
+      //     "referer": "https://transaction.jsp",
+      //     "origin": "https://",
+      //     // "referer": "https:transaction.jsp"
+      //   },
       // )
-    ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
       ..setNavigationDelegate(
         NavigationDelegate(
@@ -127,13 +135,11 @@ class _SdkViewState extends State<SdkView> {
           events.emit('message', 42);
 
           wController
-              .runJavaScriptReturningResult(
-              'window.function1()')
+              .runJavaScriptReturningResult('window.function1()')
               .then((onValue) => log('runJsFunctionResponse :: $onValue'))
               .catchError((onError) => log('runJsFunctionError :: $onError'));
         },
         child: const Icon(Icons.download),
-
       ),
       body: SafeArea(
         child: Center(

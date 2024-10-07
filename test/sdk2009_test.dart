@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/src/services/platform_channel.dart';
 import 'package:flutter_test/flutter_test.dart';

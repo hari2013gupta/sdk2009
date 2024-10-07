@@ -50,6 +50,8 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/www/
+    - assets/web/index.html
+    # - packages/sdk2009/assets/web/index.html
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   #

@@ -123,19 +123,19 @@ class _HomeViewState extends State<HomeView> {
             const Spacer(),
             const Divider(),
             TextField(controller: smsCTR),
-            StreamBuilder<String>(
-              stream: _sdk2009Plugin.getStreamTimerEvent(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Text(
-                    '${snapshot.data}',
-                    style: Theme.of(context).textTheme.displayLarge,
-                  );
-                } else {
-                  return const CircularProgressIndicator();
-                }
-              },
-            ),
+            // StreamBuilder<String>(
+            //   stream: _sdk2009Plugin.getStreamTimerEvent(),
+            //   builder: (context, snapshot) {
+            //     if (snapshot.hasData) {
+            //       return Text(
+            //         '${snapshot.data}',
+            //         style: Theme.of(context).textTheme.displayLarge,
+            //       );
+            //     } else {
+            //       return const CircularProgressIndicator();
+            //     }
+            //   },
+            // ),
           ],
         ),
       ),

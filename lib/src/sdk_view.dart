@@ -134,6 +134,11 @@ The navigation delegate is set to block navigation to the youtube website.
 
         const functionAlert = () => alert('found greeting from JS');
         window.function = functionAlert;
+        
+        (window as any).fromFlutter = function(data) {
+         alert("This is working now!!!");
+         alert(data);
+        }
 
         function fromFlutter(newTitle) {
             document.getElementById("title").innerHTML = newTitle;
@@ -216,7 +221,8 @@ The navigation delegate is set to block navigation to the youtube website.
 
           log('-------::==JS Function Test==::--------');
           wController
-              .runJavaScriptReturningResult('window.postSomeMessage("fffffff")')
+              .runJavaScriptReturningResult('window.fromFlutter("fffffff")')
+              // .runJavaScriptReturningResult('window.postSomeMessage("fffffff")')
               .then((onValue) => log('runJsFunctionResponse :: $onValue'))
               .catchError((onError) => log('runJsFunctionError :: $onError'));
           log('-------::==JS Function Test End==::--------');

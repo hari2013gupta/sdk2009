@@ -15,11 +15,5 @@ public class Sdk2009Plugin: NSObject, FlutterPlugin {
     default:
       result(FlutterMethodNotImplemented)
     }
-    case "native_toast":
-    // todo show toast
-      result("OK")
-    default:
-      result(FlutterMethodNotImplemented)
-    }
   }
 }

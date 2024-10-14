@@ -41,7 +41,7 @@ class _SdkViewState extends State<SdkView> {
     // debugPrint(indexHtml);
 
     wController.addJavaScriptChannel(
-      'Payment',
+      'Print',
       onMessageReceived: (JavaScriptMessage message) {
         //This is where you receive message from
         //javascript code and handle in Flutter/Dart
@@ -101,6 +101,8 @@ class _SdkViewState extends State<SdkView> {
 </style>
 
 <div class="btn-group">
+    <button onclick="Print.postMessage('Hello World being called from Javascript code')">Call flutter</button>
+
     <button onclick="console.error('This is an error message.')">Error</button>
     <p/>
     <button onclick="console.warn('This is a warning message.')">Warning</button>
@@ -130,20 +132,19 @@ The navigation delegate is set to block navigation to the youtube website.
         });
     </script> -->
     <script type="text/javascript">
-        // Print.postMessage('Hello World being called from Javascript code');
 
-        const functionAlert = () => alert('found greeting from JS');
-        window.function = functionAlert;
+        const functionAlert = (message) => alert(message);
+        window.fAlert = functionAlert;
         
-        (window as any).fromFlutter = function(data) {
-         alert("This is working now!!!");
-         alert(data);
-        }
-
-        function fromFlutter(newTitle) {
-            document.getElementById("title").innerHTML = newTitle;
-            sendBack();
-        }
+        const mLogs = (msg) => console.info(msg);
+        window.fLog = mLogs;
+        
+//-------experimental-----------
+        // fromFlutter(newTitle) {
+        //     document.getElementById("title").innerHTML = newTitle;
+        //     sendBack();
+        // }
+        // window.function = fff;
         function postSomeMessage(message) {
             window.webkit.messageHandlers.headerInfo.postMessage(message)
         }
@@ -221,7 +222,10 @@ The navigation delegate is set to block navigation to the youtube website.
 
           log('-------::==JS Function Test==::--------');
           wController
-              .runJavaScriptReturningResult('window.fromFlutter("fffffff")')
+          .runJavaScriptReturningResult('window.fLog("---->JS-Log Printing")');
+          wController
+              // .runJavaScriptReturningResult('window.fromFlutter("fffffff")')
+              .runJavaScriptReturningResult('window.fAlert("Loss and found greeting from JS")')
               // .runJavaScriptReturningResult('window.postSomeMessage("fffffff")')
               .then((onValue) => log('runJsFunctionResponse :: $onValue'))
               .catchError((onError) => log('runJsFunctionError :: $onError'));

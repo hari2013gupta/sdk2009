@@ -42,14 +42,15 @@ class _SdkViewState extends State<SdkView> {
 
     wController.addJavaScriptChannel(
       'Print',
-      onMessageReceived: (JavaScriptMessage message) {
+      onMessageReceived: (JavaScriptMessage jsMessage) {
         //This is where you receive message from
         //javascript code and handle in Flutter/Dart
         //like here, the message is just being printed
         //in Run/LogCat window of android studio
         //handle close button, success and failed response accordingly
-        debugPrint('---------addJavaScriptChannel------>${message.message}');
-        switch (message.message) {
+        debugPrint('---------addJavaScriptChannel------>${jsMessage.message}');
+        plugin.showNativeToast(jsMessage.message.toString());
+        switch (jsMessage.message) {
           case 'cancel':
             break;
           case 'close':
@@ -101,7 +102,7 @@ class _SdkViewState extends State<SdkView> {
 </style>
 
 <div class="btn-group">
-    <button onclick="Print.postMessage('Hello World being called from Javascript code')">Call flutter</button>
+    <button onclick="Print.postMessage('Hello JS being called from Javascript code')">Call flutter</button>
 
     <button onclick="console.error('This is an error message.')">Error</button>
     <p/>

@@ -12,11 +12,17 @@ import io.flutter.plugin.common.PluginRegistry
 
 import java.util.*
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Context.RECEIVER_EXPORTED
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.media.RingtoneManager
+import android.util.Base64
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
@@ -53,7 +59,7 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     private lateinit var activity: Activity
     private lateinit var activityBinding: ActivityPluginBinding
     private lateinit var pluginBinding: FlutterPlugin.FlutterPluginBinding
-    private lateinit var contextBinding: Context
+    private lateinit var appContext: Context
     private lateinit var result: Result
 
     companion object {
@@ -67,7 +73,7 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
 
     override fun onAttachedToEngine(flutterBinding: FlutterPlugin.FlutterPluginBinding) {
         this.pluginBinding = flutterBinding
-        this.contextBinding = flutterBinding.applicationContext
+        this.appContext = flutterBinding.applicationContext
         channel = MethodChannel(flutterBinding.binaryMessenger, CHANNEL_NAME)
         channel.setMethodCallHandler(this)
 
@@ -78,22 +84,23 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         eventChannel.setStreamHandler(TimeHandler) // TimeHandler is an event class
 
     }
+
     /// following lines under observation----------------
- //here is the implementation of that new method
+    //here is the implementation of that new method
 //  private void onAttachedToEngine(Context applicationContext, BinaryMessenger messenger) {
 //     this.mContext = applicationContext;
 //     methodChannel = new MethodChannel(messenger, "com.myplugin/my_plugin");
 //     methodChannel.setMethodCallHandler(this);
 // }
- // This static function is optional and equivalent to onAttachedToEngine. It supports the old
-  // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
-  // plugin registration via this function while apps migrate to use the new Android APIs
-  // post-flutter-1.12 via https://flutter.dev/go/android-project-migration.
-  //
-  // It is encouraged to share logic between onAttachedToEngine and registerWith to keep
-  // them functionally equivalent. Only one of onAttachedToEngine or registerWith will be called
-  // depending on the user's project. onAttachedToEngine or registerWith must both be defined
-  // in the same class.
+    // This static function is optional and equivalent to onAttachedToEngine. It supports the old
+    // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
+    // plugin registration via this function while apps migrate to use the new Android APIs
+    // post-flutter-1.12 via https://flutter.dev/go/android-project-migration.
+    //
+    // It is encouraged to share logic between onAttachedToEngine and registerWith to keep
+    // them functionally equivalent. Only one of onAttachedToEngine or registerWith will be called
+    // depending on the user's project. onAttachedToEngine or registerWith must both be defined
+    // in the same class.
 //   companion object {
 //     @JvmStatic
 //     fun registerWith(registrar: Registrar) {
@@ -114,7 +121,11 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
 
         val intentFilter = IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            activity.registerReceiver(SmsVerificationReceiver(activityBinding), intentFilter, RECEIVER_EXPORTED)
+            activity.registerReceiver(
+                SmsVerificationReceiver(activityBinding),
+                intentFilter,
+                RECEIVER_EXPORTED
+            )
         } else {
             activity.registerReceiver(SmsVerificationReceiver(activityBinding), intentFilter)
         }
@@ -129,11 +140,108 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
             "native_toast" -> {
                 val args = call.arguments as Map<String, String>
                 val msg = args["msg"]
-                Toast.makeText(activity.applicationContext, msg, Toast.LENGTH_SHORT).show()
+                Toast.makeText(appContext, msg, Toast.LENGTH_SHORT).show()
                 result.success("OK")
             }
 
-            "play_alert_sound" -> {
+            "native_alert" -> {
+                val args = call.arguments as? HashMap<String, String>
+                if (args == null) {
+                    result.error("No args", "Args is a null object.", "")
+                } else {
+                    val windowTitle = args.getOrDefault("window_title", "")
+                    val text = args.getOrDefault("alert_text", "")
+                    val alertStyle = args.getOrDefault("alert_style", "ok")
+
+                    AlertDialog.Builder(
+                        this.activity,
+                        Common.getDialogStyle(appContext)
+                    ).setTitle(windowTitle).setMessage(text).apply {
+                        when (alertStyle) {
+                            "abort_retry_ignore" ->
+                                setPositiveButton(R.string.retry) { _, _ -> result.success("retry") }
+                                    .setNeutralButton(R.string.ignore) { _, _ -> result.success("ignore") }
+                                    .setNegativeButton(R.string.abort) { _, _ -> result.success("abort") }
+
+                            "cancel_try_continue" ->
+                                setPositiveButton(R.string.try_again) { _, _ -> result.success("try_again") }
+                                    .setNeutralButton(R.string.continue_button) { _, _ ->
+                                        result.success(
+                                            "continue"
+                                        )
+                                    }
+                                    .setNegativeButton(R.string.cancel) { _, _ -> result.success("cancel") }
+
+                            "ok_cancel" ->
+                                setPositiveButton(R.string.ok) { _, _ -> result.success("ok") }
+                                    .setNegativeButton(R.string.cancel) { _, _ -> result.success("cancel") }
+
+                            "retry_cancel" ->
+                                setPositiveButton(R.string.retry) { _, _ -> result.success("retry") }
+                                    .setNegativeButton(R.string.cancel) { _, _ -> result.success("cancel") }
+
+                            "yes_no" ->
+                                setPositiveButton(R.string.yes) { _, _ -> result.success("yes") }
+                                    .setNegativeButton(R.string.no) { _, _ -> result.success("no") }
+
+                            "yes_no_cancel" ->
+                                setPositiveButton(R.string.yes) { _, _ -> result.success("yes") }
+                                    .setNeutralButton(R.string.cancel) { _, _ -> result.success("cancel") }
+                                    .setNegativeButton(R.string.no) { _, _ -> result.success("no") }
+
+                            else -> setPositiveButton(R.string.ok) { _, _ -> result.success("ok") }
+                        }
+                    }.create().show()
+                }
+            }
+
+            "native_custom_alert" -> {
+                val args = call.arguments as? HashMap<String, String>
+                if (args == null) {
+                    result.error("No args", "Args is a null object.", "")
+                } else {
+                    val windowTitle = args.getOrDefault("window_title", "")
+                    val text = args.getOrDefault("alert_text", "")
+                    val positiveButtonTitle = args.getOrDefault("positive_button_title", "")
+                    val negativeButtonTitle = args.getOrDefault("negative_button_title", "")
+                    val neutralButtonTitle = args.getOrDefault("neutral_button_title", "")
+                    val base64Icon = args.getOrDefault("base64_icon", "")
+
+                    val builder = AlertDialog.Builder(
+                        this.activity,
+                        Common.getDialogStyle(appContext)
+                    ).setTitle(windowTitle).setMessage(text)
+                    var buttonCount = 0
+                    if (positiveButtonTitle.isNotEmpty()) {
+                        builder.setPositiveButton(positiveButtonTitle) { _, _ -> result.success("positive_button") }
+                        buttonCount += 1
+                    }
+                    if (negativeButtonTitle.isNotEmpty()) {
+                        builder.setNegativeButton(negativeButtonTitle) { _, _ -> result.success("negative_button") }
+                        buttonCount += 1
+                    }
+                    if (negativeButtonTitle.isNotEmpty()) {
+                        builder.setNeutralButton(neutralButtonTitle) { _, _ -> result.success("neutral_button") }
+                        buttonCount += 1
+                    }
+                    if (buttonCount == 0) {
+                        builder.setPositiveButton("OK") { _, _ -> result.success("other") }
+                        buttonCount += 1
+                    }
+
+                    if (base64Icon.isNotEmpty()) {
+                        val decodedString = Base64.decode(base64Icon, Base64.DEFAULT)
+                        val decodedByte: Bitmap =
+                            BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+                        val icon: Drawable = BitmapDrawable(activity?.resources, decodedByte)
+                        builder.setIcon(icon)
+                    }
+
+                    builder.create().show()
+                }
+            }
+
+            "native_sound" -> {
                 val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
                 val ringTone =
                     RingtoneManager.getRingtone(this.activity, notification)

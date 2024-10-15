@@ -27,6 +27,25 @@ class MethodChannelSdk2009 extends Sdk2009Platform {
   }
 
   @override
+  Future<String?> showNativeAlert(
+      String title, String text, String style) async {
+    return await methodChannel.invokeMethod<String>('native_alert',
+        {'window_title': title, 'alert_text': text, 'alert_style': style});
+  }
+
+  @override
+  Future<String?> showNativeCustomAlert(
+      String title, String text, String style) async {
+    return await methodChannel.invokeMethod<String>('native_custom_alert',
+        {'window_title': title, 'alert_text': text, 'alert_style': style});
+  }
+
+  @override
+  Future<String?> playNativeSound() async {
+    return await methodChannel.invokeMethod<String>('native_sound');
+  }
+
+  @override
   Future<String?> getPlatformInfo() async {
     final info = await methodChannel.invokeMethod<String>('get_platform_info');
     return info;

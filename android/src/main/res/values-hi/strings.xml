@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ok">OKk</string>
+    <string name="cancel">cCancel</string>
+    <string name="retry">rRetry</string>
+    <string name="ignore">iIgnore</string>
+    <string name="abort">aAbort</string>
+    <string name="continue_button">cContinue</string>
+    <string name="try_again">tTry Again</string>
+    <string name="yes">yYes</string>
+    <string name="no">nNo</string>
+</resources>

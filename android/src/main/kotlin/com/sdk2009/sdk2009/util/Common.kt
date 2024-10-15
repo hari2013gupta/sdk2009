@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
@@ -20,6 +21,15 @@ class Common {
     companion object {
         fun clearNull(value: String?): String {
             return if (value.isNullOrEmpty()) "" else value.trim()
+        }
+
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
+        fun getDialogStyle(context: Context): Int {
+            val nightModeFlags: Int = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+            when (nightModeFlags) {
+                Configuration.UI_MODE_NIGHT_NO -> return android.R.style.Theme_DeviceDefault_Light_Dialog_Alert
+            }
+            return android.R.style.Theme_DeviceDefault_Dialog_Alert
         }
 
         @TargetApi(Build.VERSION_CODES.FROYO)
@@ -46,10 +56,11 @@ class Common {
                 batteryLevel =
                     batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
             } else {
-                val intent = ContextWrapper(activityBinding.activity.applicationContext).registerReceiver(
-                    null,
-                    IntentFilter(Intent.ACTION_BATTERY_CHANGED)
-                )
+                val intent =
+                    ContextWrapper(activityBinding.activity.applicationContext).registerReceiver(
+                        null,
+                        IntentFilter(Intent.ACTION_BATTERY_CHANGED)
+                    )
                 batteryLevel =
                     intent!!.getIntExtra(
                         BatteryManager.EXTRA_LEVEL,

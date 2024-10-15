@@ -68,6 +68,24 @@ class MockSdk2009Platform
     // TODO: implement showNativeToast
     throw UnimplementedError();
   }
+
+  @override
+  Future<String?> playNativeSound() {
+    // TODO: implement playNativeSound
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<String?> showNativeAlert(String title, String text, String style) {
+    // TODO: implement showNativeAlert
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<String?> showNativeCustomAlert(String title, String text, String style) {
+    // TODO: implement showNativeCustomAlert
+    throw UnimplementedError();
+  }
 }
 
 void main() {

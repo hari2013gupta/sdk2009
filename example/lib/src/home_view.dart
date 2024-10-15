@@ -105,11 +105,16 @@ class _HomeViewState extends State<HomeView> {
               child: const Text('===Razorpay==='),
             ),
             ElevatedButton(
-              onPressed: () async {},
+              onPressed: () async {
+                _sdk2009Plugin.showNativeAlert(
+                    'text_title', 'text_message', 'yes_no');
+              },
               child: const Text('===Stripe==='),
             ),
             ElevatedButton(
-              onPressed: () async {},
+              onPressed: () async {
+                _sdk2009Plugin.playNativeSound();
+              },
               child: const Text('===Pay-U==='),
             ),
             ElevatedButton(

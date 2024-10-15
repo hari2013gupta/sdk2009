@@ -27,8 +27,22 @@ abstract class Sdk2009Platform extends PlatformInterface {
   MethodChannel getMethodChannel() {
     throw UnimplementedError('methodChannel() has not been implemented.');
   }
+
   Future<String?> showNativeToast(String msg) {
     throw UnimplementedError('nativeToast() has not been implemented.');
+  }
+
+  Future<String?> showNativeAlert(String title, String text, String style) {
+    throw UnimplementedError('nativeAlert() has not been implemented.');
+  }
+
+  Future<String?> showNativeCustomAlert(
+      String title, String text, String style) {
+    throw UnimplementedError('nativeCustomAlert() has not been implemented.');
+  }
+
+  Future<String?> playNativeSound() {
+    throw UnimplementedError('nativeSound() has not been implemented.');
   }
 
   Future<String?> getPlatformInfo() {

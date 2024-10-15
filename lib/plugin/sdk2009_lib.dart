@@ -13,6 +13,19 @@ class Sdk2009 {
     return Sdk2009Platform.instance.showNativeToast(msg);
   }
 
+  Future<String?> showNativeAlert(String title, String text, String style) {
+    return Sdk2009Platform.instance.showNativeAlert(title, text, style);
+  }
+
+  Future<String?> showNativeCustomAlert(
+      String title, String text, String style) {
+    return Sdk2009Platform.instance.showNativeCustomAlert(title, text, style);
+  }
+
+  Future<String?> playNativeSound() {
+    return Sdk2009Platform.instance.playNativeSound();
+  }
+
   Future<String?> getPlatformInfo() {
     return Sdk2009Platform.instance.getPlatformInfo();
   }

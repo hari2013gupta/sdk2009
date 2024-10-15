@@ -144,7 +144,8 @@ The navigation delegate is set to block navigation to the youtube website.
 </body>
 </html>
 ''';
-String finalUrl = 'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf';
+    String finalUrl =
+        'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf';
     wController
       // ..loadFile(myAssetFile.path)
       // ..loadFile(indexHtml)
@@ -210,11 +211,12 @@ String finalUrl = 'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinct
           events.emit('message', 42);
 
           log('-------::==JS Function Test==::--------');
-          wController
-          .runJavaScriptReturningResult('window.fLog("---->JS-Log Printing")');
+          wController.runJavaScriptReturningResult(
+              'window.fLog("---->JS-Log Printing")');
           wController
               // .runJavaScriptReturningResult('window.fromFlutter("fffffff")')
-              .runJavaScriptReturningResult('window.fAlert("Loss and found greeting from JS")')
+              .runJavaScriptReturningResult(
+                  'window.fAlert("Loss and found greeting from JS")')
               // .runJavaScriptReturningResult('window.postSomeMessage("fffffff")')
               .then((onValue) => log('runJsFunctionResponse :: $onValue'))
               .catchError((onError) => log('runJsFunctionError :: $onError'));

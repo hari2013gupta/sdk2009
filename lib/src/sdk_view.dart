@@ -63,7 +63,7 @@ class _SdkViewState extends State<SdkView> {
         }
 
         const token = 'my_token';
-        const script = "var appToken =\"$token \"";
+        const script = "var appToken = \"$token \"";
         wController.runJavaScript(script);
       },
     );
@@ -120,18 +120,6 @@ The navigation delegate is set to block navigation to the youtube website.
 <ul><a href="https://www.google.com/">https://www.google.com/</a></ul>
 </ul>
 <!-- ---------------------- -->
-    <!-- <script>
-        // In order to call window.flutter_inappwebview.callHandler(handlerName <String>, ...args) 
-        // properly, you need to wait and listen the JavaScript event flutterInAppWebViewPlatformReady. 
-        // This event will be dispatched as soon as the platform (Android or iOS) is ready to handle the callHandler method. 
-        window.addEventListener("flutterInAppWebViewPlatformReady", function (event) {
-            // call flutter handler with name 'mySum' and pass one or more arguments
-            window.flutter_inappwebview.callHandler('mySum', 12, 2, 50).then(function (result) {
-                // get result from Flutter side. It will be the number 64.
-                console.log(result);
-            });
-        });
-    </script> -->
     <script type="text/javascript">
 
         const functionAlert = (message) => alert(message);
@@ -156,7 +144,7 @@ The navigation delegate is set to block navigation to the youtube website.
 </body>
 </html>
 ''';
-
+String finalUrl = 'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf';
     wController
       // ..loadFile(myAssetFile.path)
       // ..loadFile(indexHtml)

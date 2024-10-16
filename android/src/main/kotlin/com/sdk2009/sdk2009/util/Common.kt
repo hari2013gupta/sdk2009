@@ -24,10 +24,13 @@ class Common {
         }
 
         @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
-        fun getDialogStyle(context: Context): Int {
-            val nightModeFlags: Int = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-            when (nightModeFlags) {
-                Configuration.UI_MODE_NIGHT_NO -> return android.R.style.Theme_DeviceDefault_Light_Dialog_Alert
+        fun getDialogStyle(context: Context?): Int {
+            if(context != null) {
+                val nightModeFlags: Int =
+                    context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+                when (nightModeFlags) {
+                    Configuration.UI_MODE_NIGHT_NO -> return android.R.style.Theme_DeviceDefault_Light_Dialog_Alert
+                }
             }
             return android.R.style.Theme_DeviceDefault_Dialog_Alert
         }

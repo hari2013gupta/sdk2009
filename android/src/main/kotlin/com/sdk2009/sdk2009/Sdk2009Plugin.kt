@@ -56,10 +56,10 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     private lateinit var eventChannel: EventChannel
 //    private lateinit var locationEventChannel: EventChannel
 
-    private lateinit var activity: Activity
+    private var activity: Activity? = null
     private lateinit var activityBinding: ActivityPluginBinding
     private lateinit var pluginBinding: FlutterPlugin.FlutterPluginBinding
-    private lateinit var appContext: Context
+    private var appContext: Context? = null
     private lateinit var result: Result
 
     companion object {
@@ -121,13 +121,13 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
 
         val intentFilter = IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            activity.registerReceiver(
+            activity?.registerReceiver(
                 SmsVerificationReceiver(activityBinding),
                 intentFilter,
                 RECEIVER_EXPORTED
             )
         } else {
-            activity.registerReceiver(SmsVerificationReceiver(activityBinding), intentFilter)
+            activity?.registerReceiver(SmsVerificationReceiver(activityBinding), intentFilter)
         }
         // activity result listener from here
         activityBinding.addActivityResultListener(this)
@@ -287,6 +287,7 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
+        appContext = null
     }
 
 //    object LocationHandler : EventChannel.StreamHandler {
@@ -390,7 +391,8 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     }
 
     override fun onDetachedFromActivity() {
-        activity.unregisterReceiver(SmsVerificationReceiver(activityBinding))
+        activity!!.unregisterReceiver(SmsVerificationReceiver(activityBinding))
+        activity = null
     }
 
 }

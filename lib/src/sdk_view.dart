@@ -1,11 +1,9 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:events_emitter/events_emitter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sdk2009/plugin/sdk2009_lib.dart';
-import 'package:sdk2009/src/utils/app_assets.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class SdkView extends StatefulWidget {
@@ -55,6 +53,9 @@ class _SdkViewState extends State<SdkView> {
             break;
           case 'close':
             break;
+          case 'js_close':
+            pageFinishedCallback('success_response');
+            break;
           case 'success':
             break;
           case 'fail':
@@ -102,7 +103,7 @@ class _SdkViewState extends State<SdkView> {
 </style>
 
 <div class="btn-group">
-    <button onclick="Print.postMessage('Hello JS being called from Javascript code')">Call flutter</button>
+    <button onclick="Print.postMessage('js_close')">Call flutter</button>
 
     <button onclick="console.error('This is an error message.')">Error</button>
     <p/>
@@ -250,7 +251,10 @@ The navigation delegate is set to block navigation to the youtube website.
 
   Future<void> pageFinishedCallback(s) async {
     isLoading = false;
-    Future.delayed(Duration.zero, () => Navigator.of(context).pop(s));
+    if(!context.mounted){
+      return;
+    }
+    Future.delayed(Duration.zero, () => Navigator.pop(context, s));
   }
 
   void listenVerificationCodeFromNative() {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sdk2009/plugin/sdk2009_lib.dart';
+import 'package:sdk2009/sdk2009.dart';
 import 'package:sdk2009_example/src/utils/app_utils.dart';
 
 class WebappView extends StatelessWidget {
@@ -8,13 +8,26 @@ class WebappView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final plugin = Sdk2009();
+
+    //Handle Responses
+
+    void handleResponseError(ResponseFailureResponse response) {
+      plugin.showNativeAlert('Error response', 'failed', 'yes_no');
+    }
+
+    void handleResponseSuccess(ResponseSuccessResponse response) {
+      plugin.showNativeAlert('Successful response', 'ID: SUCCESS', 'yes_no');
+    }
+
     return Scaffold(
       body: Center(
         child: ElevatedButton(
           onPressed: () async {
-              // final result = 
-              plugin.init(context: context, paymentUrl: sbiCardUrl);
-              // debugPrint('================>result=>$result');
+            plugin.on(
+                context: context,
+                errorResponse: handleResponseError,
+                successResponse: handleResponseSuccess);
+            plugin.init(context: context, paymentUrl: sbiCardUrl);
           },
           child: const Text('Pay Now'),
         ),

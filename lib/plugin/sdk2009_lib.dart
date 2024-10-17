@@ -1,6 +1,8 @@
+import 'package:events_emitter/events_emitter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sdk2009/src/sdk_loader.dart';
+import 'package:sdk2009/sdk2009.dart';
+import 'package:sdk2009/src/sdk_view.dart';
 
 import 'sdk2009_platform_interface.dart';
 
@@ -59,9 +61,49 @@ class Sdk2009 {
     return Sdk2009Platform.instance.getBoomerang();
   }
 
-  void init({required BuildContext context, required String paymentUrl}) {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => SdkLoader(url: paymentUrl),
-    ));
+  // Event names
+  static const eventSuccess = 'response.success';
+  static const eventError = 'response.error';
+
+  // EventEmitter instance used for communication
+  late EventEmitter _eventEmitter;
+
+  /// Registers event listeners for events
+  void activate(String event, Function handler) {
+    cb(event) {
+      handler(event);
+      // handler(event.eventData);
+    }
+
+    _eventEmitter.on(event, cb);
+    // _eventEmitter.on(event, null, cb);
+  }
+
+  void on(
+      {required BuildContext context,
+      required Function errorResponse,
+      required Function successResponse}) {
+    _eventEmitter = EventEmitter();
+    activate(eventSuccess, successResponse);
+    activate(eventError, errorResponse);
+  }
+
+  void init({required BuildContext context, required String paymentUrl}) async {
+    waitingForWebviewResponse(context, paymentUrl);
+  }
+
+  Future<void> waitingForWebviewResponse(context, paymentUrl) async {
+    await Navigator.of(context)
+        .push(MaterialPageRoute(
+      builder: (context) => SdkView(url: paymentUrl),
+    ))
+        .then((s) {
+      Map<String, dynamic> data = {'err': 'hellow error'};
+      dynamic payload =
+          ResponseFailureResponse(code: 11, message: s, error: data);
+
+      _eventEmitter.emit(eventError, payload);
+      // _eventEmitter.emit(eventError, null, payload);
+    }).catchError((onError) {});
   }
 }

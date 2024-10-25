@@ -15,12 +15,14 @@ class WebappView extends StatelessWidget implements PluginCallback {
     //Handle Responses
 
     void handleResponseError(ResponseFailureResponse response) {
-      plugin.showNativeAlert('Error response${response.code}',
-          '${response.message}${response.error}', 'yes_no');
+      log("Received eventSuccessMessage event: ${response.code},${response.message},${response.error}");
+      // plugin.showNativeAlert('Error response${response.code}',
+      //     '${response.message}${response.error}', 'yes_no');
     }
 
     void handleResponseSuccess(ResponseSuccessResponse response) {
-      plugin.showNativeAlert('Successful response', 'code: SUCCESS', 'yes_no');
+      log("Received eventSuccessMessage event: success");
+      // plugin.showNativeAlert('Successful response', 'code: SUCCESS', 'yes_no');
     }
 
     // Register this class as the callback (this is done in plugin side)

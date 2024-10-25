@@ -84,7 +84,9 @@ class Sdk2009 {
 
   /// Registers listeners for events
   void activate(String event, Function handler) {
+    debugPrint('------result void activate ---->');
     cb(event) {
+      debugPrint('------result void cb inside ---->');
       handler(event);
       // handler(event.eventData);
     }
@@ -105,7 +107,6 @@ class Sdk2009 {
       // setState(() {
       String eventMessage = event; // Update UI based on event
       debugPrint('------result stream event ----> $eventMessage');
-
       // });
     });
     //==================== callback event register===
@@ -148,7 +149,7 @@ class Sdk2009 {
       String eventMessage = "Plugin event success triggered!";
       _callback?.onSuccess(eventMessage); // Call the callback
       String eventFailedMessage = "Plugin event failed triggered!";
-      _callback?.onSuccess(eventFailedMessage); // Call the callback
+      _callback?.onFailed(eventFailedMessage); // Call the callback
       // }
     }).catchError((onError) {});
   }

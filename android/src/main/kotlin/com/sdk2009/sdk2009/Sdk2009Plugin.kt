@@ -34,8 +34,8 @@ import com.sdk2009.sdk2009.util.Common
 import com.sdk2009.sdk2009.util.UpiIntentUtil
 import com.sdk2009.sdk2009.util.SmsConsentUtil
 import com.sdk2009.sdk2009.util.TimeHandler
+import com.sdk2009.sdk2009.receiver.AnyEventHandler
 import org.json.JSONObject
-
 /** Sdk2009Plugin
  *
  * 1# GET PLATFORM VERSION
@@ -82,6 +82,7 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
             flutterBinding.binaryMessenger, "time_handler_event"
         ) // timeHandlerEvent event name
         eventChannel.setStreamHandler(TimeHandler) // TimeHandler is an event class
+        eventChannel.setStreamHandler(AnyEventHandler) // AnyEventHandler is an event class
 
     }
 

@@ -77,6 +77,19 @@ class _HomeViewState extends State<HomeView> {
   //   });
   // }
 
+  // void _handleAnyEventListener() {
+  //   const EventChannel _stream = EventChannel('anyHandlerEvent');
+  //
+  //   bool? _locationStatusChanged;
+  //   _stream.receiveBroadcastStream().listen((onData) {
+  //     _locationStatusChanged = onData;
+  //     print("LOCATION ACCESS IS NOW ${onData ? 'On' : 'Off'}");
+  //     if (onData == false) {
+  //       // Request Permission Access
+  //     }
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

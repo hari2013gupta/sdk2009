@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:events_emitter/events_emitter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sdk2009/event/callback_interface.dart';
 import 'package:sdk2009/sdk2009.dart';
 import 'package:sdk2009/src/sdk_view.dart';
 
@@ -49,6 +52,10 @@ class Sdk2009 {
     return Sdk2009Platform.instance.streamTimeFromNative();
   }
 
+  Stream<String> getStreamAnyEvent() {
+    return Sdk2009Platform.instance.streamAnyFromNative();
+  }
+
   Stream<String> streamLocationEvent() {
     return Sdk2009Platform.instance.streamLocationFromNative();
   }
@@ -61,6 +68,13 @@ class Sdk2009 {
     return Sdk2009Platform.instance.getBoomerang();
   }
 
+// 1. Define a Stream in your plugin
+// Remember to call dispose on eventController to avoid memory leaks when it’s no longer needed.
+  StreamController<String> eventController =
+      StreamController<String>.broadcast();
+
+  Stream<String> get eventStream => eventController.stream;
+
   // Event names
   static const eventSuccess = 'response.success';
   static const eventError = 'response.error';
@@ -68,7 +82,7 @@ class Sdk2009 {
   // EventEmitter instance used for communication
   late EventEmitter _eventEmitter;
 
-  /// Registers event listeners for events
+  /// Registers listeners for events
   void activate(String event, Function handler) {
     cb(event) {
       handler(event);
@@ -80,16 +94,34 @@ class Sdk2009 {
   }
 
   void on(
-      {required BuildContext context,
+      {required PluginCallback pluginCallback,
       required Function errorResponse,
       required Function successResponse}) {
-    _eventEmitter = EventEmitter();
+    _eventEmitter = EventEmitter(); // eent emitter register here
     activate(eventSuccess, successResponse);
     activate(eventError, errorResponse);
+    //====================stream controller event register===
+    eventController.stream.listen((event) {
+      // setState(() {
+      String eventMessage = event; // Update UI based on event
+      debugPrint('------result stream event ----> $eventMessage');
+
+      // });
+    });
+    //==================== callback event register===
+    setCallback(pluginCallback);
+    //==================== End register===
   }
 
   void init({required BuildContext context, required String paymentUrl}) async {
     waitingForWebviewResponse(context, paymentUrl);
+  }
+
+  PluginCallback? _callback;
+
+  // Set the callback
+  void setCallback(PluginCallback callback) {
+    _callback = callback;
   }
 
   Future<void> waitingForWebviewResponse(context, paymentUrl) async {
@@ -104,6 +136,20 @@ class Sdk2009 {
 
       _eventEmitter.emit(eventError, payload);
       // _eventEmitter.emit(eventError, null, payload);
+
+      //====================stream controller event result===
+      debugPrint('------Emit Adding here stream event ---->');
+      // Listen to the event stream from the plugin
+      eventController.add('2. ----->Trigger an event in your plugin');
+
+      //====================callback event result===
+      // Simulate triggering an event
+      // void triggerEvent() {
+      String eventMessage = "Plugin event success triggered!";
+      _callback?.onSuccess(eventMessage); // Call the callback
+      String eventFailedMessage = "Plugin event failed triggered!";
+      _callback?.onSuccess(eventFailedMessage); // Call the callback
+      // }
     }).catchError((onError) {});
   }
 }

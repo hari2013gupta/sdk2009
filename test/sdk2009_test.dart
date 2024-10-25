@@ -86,6 +86,12 @@ class MockSdk2009Platform
     // TODO: implement showNativeCustomAlert
     throw UnimplementedError();
   }
+
+  @override
+  Stream<String> streamAnyFromNative() {
+    // TODO: implement streamAnyFromNative
+    throw UnimplementedError();
+  }
 }
 
 void main() {

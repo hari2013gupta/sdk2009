@@ -15,8 +15,8 @@ object TimeHandler : EventChannel.StreamHandler {
     private var eventSink: EventChannel.EventSink? = null
 
     @SuppressLint("SimpleDateFormat")
-    override fun onListen(p0: Any?, sink: EventChannel.EventSink) {
-        eventSink = sink
+    override fun onListen(p0: Any?, events: EventChannel.EventSink) {
+        eventSink = events
         // every second send the time
         val r: Runnable = object : Runnable {
             override fun run() {

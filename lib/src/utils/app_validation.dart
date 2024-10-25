@@ -37,9 +37,15 @@ class AppValidation {
         if (uri.scheme != 'https') {
           throw Exception('Not a secure url');
         }
+        // Extract the empty 'host'
         if (uri.host.isEmpty) {
           throw Exception('Empty host');
         }
+
+        // Extract the 'id' query parameter
+        String? id = uri.queryParameters['id'];
+
+        print('ID: $id'); // Output: abc
       } on Exception catch (e) {
         // If parsing fails, it's not a valid URL
         throw Exception(e.toString());

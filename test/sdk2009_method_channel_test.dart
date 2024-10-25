@@ -15,7 +15,7 @@ void main() {
       channel,
       (MethodCall methodCall) async {
         final info = {'battery_level': 101, 'platform_android': '42'};
-        return info;
+        return info.toString();
       },
     );
   });
@@ -27,6 +27,6 @@ void main() {
 
   test('get_platform_info', () async {
     final info = {'battery_level': 101, 'platform_android': '42'};
-    expect(await platform.getPlatformInfo(), info);
+    expect(await platform.getPlatformInfo(), info.toString());
   });
 }

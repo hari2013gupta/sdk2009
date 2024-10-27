@@ -11,9 +11,9 @@ class WebappView extends StatelessWidget implements PluginCallback {
   @override
   Widget build(BuildContext context) {
     final plugin = Sdk2009();
+    CallbackFunction cf;
 
     //Handle Responses
-
     void handleResponseError(ResponseFailureResponse response) {
       log("Received eventSuccessMessage event: ${response.code},${response.message},${response.error}");
       // plugin.showNativeAlert('Error response${response.code}',
@@ -32,6 +32,11 @@ class WebappView extends StatelessWidget implements PluginCallback {
         child: ElevatedButton(
           onPressed: () async {
             plugin.on(
+                callbackFunction: CallbackFunction(onSuccessCallback: (s) {
+                  log('---1--cb result--ss-->$s');
+                }, onFailedCallback: (f) {
+                  log('---2--cb result--ff-->$f');
+                }),
                 pluginCallback: this,
                 errorResponse: handleResponseError,
                 successResponse: handleResponseSuccess);

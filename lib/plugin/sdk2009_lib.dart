@@ -96,7 +96,8 @@ class Sdk2009 {
   }
 
   void on(
-      {required PluginCallback pluginCallback,
+      {required CallbackFunction callbackFunction,
+        required PluginCallback pluginCallback,
       required Function errorResponse,
       required Function successResponse}) {
     _eventEmitter = EventEmitter(); // eent emitter register here
@@ -111,6 +112,8 @@ class Sdk2009 {
     });
     //==================== callback event register===
     setCallback(pluginCallback);
+
+    setFunctionCallback(callbackFunction);
     //==================== End register===
   }
 
@@ -119,12 +122,16 @@ class Sdk2009 {
   }
 
   PluginCallback? _callback;
+  CallbackFunction? _callbackFunction;
 
   // Set the callback
   void setCallback(PluginCallback callback) {
     _callback = callback;
   }
 
+  void setFunctionCallback(CallbackFunction callbackFunction) {
+    _callbackFunction = callbackFunction;
+  }
   Future<void> waitingForWebviewResponse(context, paymentUrl) async {
     await Navigator.of(context)
         .push(MaterialPageRoute(
@@ -150,7 +157,11 @@ class Sdk2009 {
       _callback?.onSuccess(eventMessage); // Call the callback
       String eventFailedMessage = "Plugin event failed triggered!";
       _callback?.onFailed(eventFailedMessage); // Call the callback
+      //====================callback event result callback function ===
+      _callbackFunction?.triggerEventFailed();
+      _callbackFunction?.onSuccessCallback("Trigger--- success-- callback-- funcation----");
       // }
     }).catchError((onError) {});
   }
+
 }

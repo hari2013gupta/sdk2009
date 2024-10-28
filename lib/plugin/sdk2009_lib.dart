@@ -1,11 +1,13 @@
 import 'dart:async';
+import 'dart:developer';
 
-import 'package:events_emitter/events_emitter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sdk2009/event/callback_interface.dart';
 import 'package:sdk2009/sdk2009.dart';
 import 'package:sdk2009/src/sdk_view.dart';
+import 'package:sdk2009/src/singleton/generic_event_bus.dart';
+import 'package:sdk2009/src/singleton/global_event_bus.dart';
+import 'package:sdk2009/src/singleton/multi_event_bus.dart';
 
 import 'sdk2009_platform_interface.dart';
 
@@ -68,100 +70,103 @@ class Sdk2009 {
     return Sdk2009Platform.instance.getBoomerang();
   }
 
-// 1. Define a Stream in your plugin
-// Remember to call dispose on eventController to avoid memory leaks when it’s no longer needed.
-  StreamController<String> eventController =
-      StreamController<String>.broadcast();
-
-  Stream<String> get eventStream => eventController.stream;
-
   // Event names
   static const eventSuccess = 'response.success';
   static const eventError = 'response.error';
 
-  // EventEmitter instance used for communication
-  late EventEmitter _eventEmitter;
-
   /// Registers listeners for events
-  void activate(String event, Function handler) {
-    debugPrint('------result void activate ---->');
-    cb(event) {
-      debugPrint('------result void cb inside ---->');
-      handler(event);
-      // handler(event.eventData);
-    }
+  void activate({
+    required PluginCallback pluginCallback,
+    required CallbackFunction callbackFunction,
+  }) {
+    // Register listeners using the typedef
+    // GlobalEventBus<ResponseSuccessResponse>().registerListener((event) {
+    //   debugPrint('-----GlobalEventBus---received-----2');
+    //   debugPrint('event received :: ${event.paymentId}');
+    //   // _callback?.onSuccess(event);
+    //   // _callbackFunction?.onSuccessCallback(event);
+    // });
 
-    _eventEmitter.on(event, cb);
-    // _eventEmitter.on(event, null, cb);
-  }
+    // GenericEventBus().registerListener<ResponseSuccessResponse>((event) {
+    //   debugPrint('-----GenericEventBus---received-----2');
+    //   debugPrint('event received :: ${event.paymentId}');
+    //   // _callback?.onSuccess(event);
+    //   // _callbackFunction?.onSuccessCallback(event);
+    // });
+    // GlobalEventBus<ResponseFailureResponse>().registerListener((event) {
+    //   debugPrint('-----GlobalEventBus---received-----1');
+    //   debugPrint('event received :: ${event.message}');
+    //   // _callback?.onFailed(event); // Fire the callback
+    // });
 
-  void on(
-      {required CallbackFunction callbackFunction,
-        required PluginCallback pluginCallback,
-      required Function errorResponse,
-      required Function successResponse}) {
-    _eventEmitter = EventEmitter(); // eent emitter register here
-    activate(eventSuccess, successResponse);
-    activate(eventError, errorResponse);
-    //====================stream controller event register===
-    eventController.stream.listen((event) {
-      // setState(() {
-      String eventMessage = event; // Update UI based on event
-      debugPrint('------result stream event ----> $eventMessage');
-      // });
+    // Register a single listener for multiple types
+    MultiEventBus()
+        .registerMultiTypeListener([ResponseSuccessResponse, ResponseFailureResponse], (event) {
+      if (event is ResponseSuccessResponse) {
+        log('-----MultiEventBus----event received :: ${event.paymentId}');
+        _callback?.onSuccess(event);
+        _callbackFunction?.onSuccessCallback(event);
+      } else if (event is ResponseFailureResponse) {
+        log('------MultiEventBus-----event received :: ${event.message}');
+        _callback?.onFailed(event);
+        _callbackFunction?.onFailedCallback(event);
+      } else {
+        log('event received :: Unknown event: $event');
+      }
     });
-    //==================== callback event register===
-    setCallback(pluginCallback);
 
-    setFunctionCallback(callbackFunction);
-    //==================== End register===
+    _callback = pluginCallback;
+
+    _callbackFunction = callbackFunction;
   }
 
-  void init({required BuildContext context, required String paymentUrl}) async {
+  void init({
+    required BuildContext context,
+    required String paymentUrl,
+    required PluginCallback pluginCallback,
+    required CallbackFunction callbackFunction,
+  }) async {
+    activate(
+        pluginCallback: pluginCallback, callbackFunction: callbackFunction);
     waitingForWebviewResponse(context, paymentUrl);
   }
 
   PluginCallback? _callback;
   CallbackFunction? _callbackFunction;
 
-  // Set the callback
-  void setCallback(PluginCallback callback) {
-    _callback = callback;
-  }
-
-  void setFunctionCallback(CallbackFunction callbackFunction) {
-    _callbackFunction = callbackFunction;
-  }
   Future<void> waitingForWebviewResponse(context, paymentUrl) async {
     await Navigator.of(context)
         .push(MaterialPageRoute(
       builder: (context) => SdkView(url: paymentUrl),
     ))
         .then((s) {
-      Map<String, dynamic> data = {'err': 'hellow error'};
-      dynamic payload =
-          ResponseFailureResponse(code: 11, message: s, error: data);
+      // bus.emit('streamController');
 
-      _eventEmitter.emit(eventError, payload);
-      // _eventEmitter.emit(eventError, null, payload);
-
-      //====================stream controller event result===
-      debugPrint('------Emit Adding here stream event ---->');
-      // Listen to the event stream from the plugin
-      eventController.add('2. ----->Trigger an event in your plugin');
-
-      //====================callback event result===
       // Simulate triggering an event
-      // void triggerEvent() {
-      String eventMessage = "Plugin event success triggered!";
-      _callback?.onSuccess(eventMessage); // Call the callback
-      String eventFailedMessage = "Plugin event failed triggered!";
-      _callback?.onFailed(eventFailedMessage); // Call the callback
-      //====================callback event result callback function ===
-      _callbackFunction?.triggerEventFailed();
-      _callbackFunction?.onSuccessCallback("Trigger--- success-- callback-- funcation----");
+      // String eventMessage = "paymentId";
+      // ResponseSuccessResponse eventSuccessMessage =
+      //     ResponseSuccessResponse(eventMessage, 'orderId', 'signature');
+      // _callback?.onSuccess(eventSuccessMessage);
+
+      // String eventFailedMessage = "Plugin event failed triggered!";
+      // Map<String, dynamic> data = {'err': 'hello error'};
+      // dynamic payload = ResponseFailureResponse(
+      //     code: 11, message: eventFailedMessage, error: data);
+      // _callback?.onSuccess(eventSuccessMessage);
+      // _callback?.onFailed(payload); // Fire the callback
+      // dynamic p2 = ResponseSuccessResponse(
+      //     'paymentId11111', 'orderId3333', 'signature2222');
+      //
+      // bus.emit(p2);
       // }
+
+      dynamic successEvent = ResponseSuccessResponse(
+          'paymentIdu111', 'orderId3333', 'signature2222');
+
+      MultiEventBus().emit<ResponseSuccessResponse>(successEvent);
+
+      // GlobalEventBus<ResponseSuccessResponse>().emit(p2);
+      // GenericEventBus().emit<ResponseSuccessResponse>(successEvent);
     }).catchError((onError) {});
   }
-
 }

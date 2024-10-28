@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:sdk2009/event/callback_interface.dart';
 import 'package:sdk2009/sdk2009.dart';
 import 'package:sdk2009_example/src/utils/app_utils.dart';
 
@@ -11,7 +10,18 @@ class WebappView extends StatelessWidget implements PluginCallback {
   @override
   Widget build(BuildContext context) {
     final plugin = Sdk2009();
-    CallbackFunction cf;
+
+    CallbackFunction cf = CallbackFunction(
+      onSuccessCallback: (ResponseSuccessResponse response) {
+        log("Received eventSuccessMessage event: ${response.paymentId}");
+        // plugin.showNativeAlert('Successful response', 'code: SUCCESS', 'yes_no');
+      },
+      onFailedCallback: (ResponseFailureResponse response) {
+        log("Received eventSuccessMessage event: ${response.code},${response.message},${response.error}");
+        // plugin.showNativeAlert('Error response${response.code}',
+        //     '${response.message}${response.error}', 'yes_no');
+      },
+    );
 
     //Handle Responses
     void handleResponseError(ResponseFailureResponse response) {
@@ -31,16 +41,12 @@ class WebappView extends StatelessWidget implements PluginCallback {
       body: Center(
         child: ElevatedButton(
           onPressed: () async {
-            plugin.on(
-                callbackFunction: CallbackFunction(onSuccessCallback: (s) {
-                  log('---1--cb result--ss-->$s');
-                }, onFailedCallback: (f) {
-                  log('---2--cb result--ff-->$f');
-                }),
-                pluginCallback: this,
-                errorResponse: handleResponseError,
-                successResponse: handleResponseSuccess);
-            plugin.init(context: context, paymentUrl: sbiCardUrl);
+            plugin.init(
+              context: context,
+              paymentUrl: sbiCardUrl,
+              callbackFunction: cf,
+              pluginCallback: this,
+            );
           },
           child: const Text('Pay Now'),
         ),
@@ -49,18 +55,18 @@ class WebappView extends StatelessWidget implements PluginCallback {
   }
 
   @override
-  void onFailed(String eventFailedMessage) {
+  void onFailed(ResponseFailureResponse failedResponse) {
     // TODO: implement onFailed
 
-    log("Received eventFailedMessage event: $eventFailedMessage");
+    log("Received eventFailedMessage event: ${failedResponse.message}");
     // You can now handle the event, update UI, etc.
   }
 
   @override
-  void onSuccess(String eventSuccessMessage) {
+  void onSuccess(ResponseSuccessResponse successResponse) {
     // TODO: implement onSuccess
 
-    log("Received eventSuccessMessage event: $eventSuccessMessage");
+    log("Received eventSuccessMessage event: ${successResponse.paymentId}");
     // You can now handle the event, update UI, etc.
   }
 }

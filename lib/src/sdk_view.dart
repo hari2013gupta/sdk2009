@@ -1,9 +1,10 @@
 import 'dart:developer';
 
-import 'package:events_emitter/events_emitter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sdk2009/plugin/sdk2009_lib.dart';
+import 'package:sdk2009/src/model/response_success_model.dart';
+import 'package:sdk2009/src/singleton/multi_event_bus.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class SdkView extends StatefulWidget {
@@ -17,7 +18,6 @@ class SdkView extends StatefulWidget {
 
 class _SdkViewState extends State<SdkView> {
   late final WebViewController wController;
-  final events = EventEmitter();
   final plugin = Sdk2009();
   bool isLoading = true;
 
@@ -25,8 +25,6 @@ class _SdkViewState extends State<SdkView> {
   void initState() {
     super.initState();
     wController = WebViewController();
-    events.on('message', (String data) => print('String: $data'));
-    events.on('message', (int data) => print('Integer: $data'));
     getPlatformVersion();
 
     initiateWebViewController();
@@ -208,9 +206,6 @@ The navigation delegate is set to block navigation to the youtube website.
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          events.emit('message', 'Hello World');
-          events.emit('message', 42);
-
           log('-------::==JS Function Test==::--------');
           wController.runJavaScriptReturningResult(
               'window.fLog("---->JS-Log Printing")');
@@ -254,6 +249,11 @@ The navigation delegate is set to block navigation to the youtube website.
     if(!context.mounted){
       return;
     }
+    // dynamic p2 = ResponseSuccessResponse(
+    //     'paymentIdu111', 'orderId3333', 'signature2222');
+    //
+    // MultiEventBus.getInstance().emit<ResponseSuccessResponse>(p2);
+
     Future.delayed(Duration.zero, () => Navigator.pop(context, s));
   }
 

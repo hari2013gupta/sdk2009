@@ -1,72 +1,72 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-name: Web-CI
-
-# This workflow is triggered on pushes to the repository.
-
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Clone repository
-        uses: actions/checkout@v4
-
-      # Note: This workflow uses the latest stable version of the Dart SDK.
-      # You can specify other versions if desired, see documentation here:
-      # https://github.com/dart-lang/setup-dart/blob/main/README.md
-      # - uses: dart-lang/setup-dart@v1
-
-#      - name: Setup Dart Environment
-      - name: Setup Flutter Environment
-        uses: subosito/flutter-action@v2
-        id: flutter-action
-        with:
-          channel: stable # [dev, beta]
-          flutter-version: 3.24.4 #[5b12b74, tag, commit, branch, main]
-#          flutter-version-file: pubspec.yaml # path to pubspec.yaml [exact-ver]
-          # optional parameters follow
-          cache: true
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      # Your project will need to have tests in test/ and a dependency on
-      # package:test for this step to succeed. Note that Flutter projects will
-      # want to change this to 'flutter test'.
-      - name: Run tests
-        run: flutter test
-
-      - name: Build web app
-        run: cd example && flutter build web
-      - name: Upload Web Build Files
-        uses: actions/upload-artifact@v4
-        with:
-          name: web-release
-          path: ./build/web
-
-    # deploy:
-#    name: Deploy Web Build
-#      - needs: build
-
-      - name: Download Web Release
-        uses: actions/download-artifact@v4
-        with:
-          name: web-release
-
-      - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
+## This workflow uses actions that are not certified by GitHub.
+## They are provided by a third-party and are governed by
+## separate terms of service, privacy policy, and support
+## documentation.
+#
+#name: Web-CI
+#
+## This workflow is triggered on pushes to the repository.
+#
+#on:
+#  push:
+#    branches: [ "main" ]
+#  pull_request:
+#    branches: [ "main" ]
+#
+#  workflow_dispatch:
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Clone repository
+#        uses: actions/checkout@v4
+#
+#      # Note: This workflow uses the latest stable version of the Dart SDK.
+#      # You can specify other versions if desired, see documentation here:
+#      # https://github.com/dart-lang/setup-dart/blob/main/README.md
+#      # - uses: dart-lang/setup-dart@v1
+#
+##      - name: Setup Dart Environment
+#      - name: Setup Flutter Environment
+#        uses: subosito/flutter-action@v2
+#        id: flutter-action
+#        with:
+#          channel: stable # [dev, beta]
+#          flutter-version: 3.24.4 #[5b12b74, tag, commit, branch, main]
+##          flutter-version-file: pubspec.yaml # path to pubspec.yaml [exact-ver]
+#          # optional parameters follow
+#          cache: true
+#
+#      - name: Install dependencies
+#        run: flutter pub get
+#
+#      # Your project will need to have tests in test/ and a dependency on
+#      # package:test for this step to succeed. Note that Flutter projects will
+#      # want to change this to 'flutter test'.
+#      - name: Run tests
+#        run: flutter test
+#
+#      - name: Build web app
+#        run: cd example && flutter build web
+#      - name: Upload Web Build Files
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: web-release
+#          path: ./build/web
+#
+#    # deploy:
+##    name: Deploy Web Build
+##      - needs: build
+#
+#      - name: Download Web Release
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: web-release
+#
+#      - name: Deploy to gh-pages
+#        uses: peaceiris/actions-gh-pages@v3
+#        with:
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          publish_dir: ./

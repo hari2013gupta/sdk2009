@@ -13,7 +13,7 @@ class SdkLoader extends StatelessWidget {
   Widget build(BuildContext context) {
     Future.delayed(const Duration(seconds: 2), () async {
       Tuple validationResult = AppValidation().isValidUrl(url);
-      if (!validationResult.x) {
+      if (!validationResult.x && context.mounted) {
         Navigator.of(context).pop();
         return;
       }

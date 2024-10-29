@@ -86,8 +86,10 @@ jobs:
       - name: Run tests
         run: flutter test
 
-#      - name: Build android apk
-#        run: flutter build apk
+      - name: Build android apk
+        run: |
+          cd example
+          flutter build apk
 
 #      - name: Start Android Release Build
 #        run: flutter build appbundle
@@ -101,10 +103,27 @@ jobs:
 #          name: release-apk
 #          path: build/app/outputs/apk/release/app-release.apk
 
-      - name: Build web app
-        run: flutter build web
-      - name: Upload Web Build Files
-        uses: actions/upload-artifact@v4
-        with:
-          name: web-release
-          path: ./build/web
+#      - name: Build web app
+#        run: flutter build web
+#      - name: Upload Web Build Files
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: web-release
+#          path: ./build/web
+
+#  deploy:
+#    name: Deploy Web Build
+#    needs: build
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Download Web Release
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: web-release
+#
+#      - name: Deploy to gh-pages
+#        uses: peaceiris/actions-gh-pages@v3
+#        with:
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          publish_dir: ./

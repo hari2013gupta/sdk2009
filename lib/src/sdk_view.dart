@@ -3,8 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sdk2009/plugin/sdk2009_lib.dart';
-import 'package:sdk2009/src/model/response_success_model.dart';
-import 'package:sdk2009/src/singleton/multi_event_bus.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class SdkView extends StatefulWidget {
@@ -143,8 +141,8 @@ The navigation delegate is set to block navigation to the youtube website.
 </body>
 </html>
 ''';
-    String finalUrl =
-        'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf';
+    // String finalUrl =
+    //     'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf';
     wController
       // ..loadFile(myAssetFile.path)
       // ..loadFile(indexHtml)
@@ -210,10 +208,10 @@ The navigation delegate is set to block navigation to the youtube website.
           wController.runJavaScriptReturningResult(
               'window.fLog("---->JS-Log Printing")');
           wController
-              // .runJavaScriptReturningResult('window.fromFlutter("fffffff")')
+              // .runJavaScriptReturningResult('window.fromFlutter("ok")')
               .runJavaScriptReturningResult(
                   'window.fAlert("Loss and found greeting from JS")')
-              // .runJavaScriptReturningResult('window.postSomeMessage("fffffff")')
+              // .runJavaScriptReturningResult('window.postSomeMessage("ok1")')
               .then((onValue) => log('runJsFunctionResponse :: $onValue'))
               .catchError((onError) => log('runJsFunctionError :: $onError'));
           log('-------::==JS Function Test End==::--------');

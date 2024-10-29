@@ -14,7 +14,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   String _platformInfo = 'Unknown';
   final _sdk2009Plugin = Sdk2009();
-  late final smsCTR;
+  late final TextEditingController smsCTR;
 
   @override
   void initState() {

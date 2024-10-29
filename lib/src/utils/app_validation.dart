@@ -45,7 +45,7 @@ class AppValidation {
         // Extract the 'id' query parameter
         String? id = uri.queryParameters['id'];
 
-        print('ID: $id'); // Output: abc
+        log('ID: $id'); // Output: abc
       } on Exception catch (e) {
         // If parsing fails, it's not a valid URL
         throw Exception(e.toString());

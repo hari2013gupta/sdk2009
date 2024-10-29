@@ -1,17 +1,16 @@
 // In your plugin (plugin.dart)
 import 'package:sdk2009/sdk2009.dart';
-import 'package:sdk2009/src/model/response_success_model.dart';
 
 // Constants used when working with native ports.
 // These must match the constants in runtime/bin/dartutils.h class CObject.
-const int _successResponse = 0;
-const int _illegalArgumentResponse = 1;
-const int _osErrorResponse = 2;
-const int _fileClosedResponse = 3;
-
-const int _errorResponseErrorType = 0;
-const int _osErrorResponseErrorCode = 1;
-const int _osErrorResponseMessage = 2;
+// const int _successResponse = 0;
+// const int _illegalArgumentResponse = 1;
+// const int _osErrorResponse = 2;
+// const int _fileClosedResponse = 3;
+//
+// const int _errorResponseErrorType = 0;
+// const int _osErrorResponseErrorCode = 1;
+// const int _osErrorResponseMessage = 2;
 
 class CallbackFunction {
   final void Function(ResponseSuccessResponse successResponse)

@@ -8,7 +8,7 @@ class ResponseFailureResponse {
   static ResponseFailureResponse fromMap(Map<dynamic, dynamic> map) {
     var code = map["code"] as int?;
     var message = map["message"] as String?;
-    var responseBody;
+    dynamic responseBody;
 
     if (responseBody is Map<dynamic, dynamic>) {
       return ResponseFailureResponse(

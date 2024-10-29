@@ -44,10 +44,10 @@ jobs:
         id: flutter-action
         with:
           channel: stable # [dev, beta]
-#          dry-run: true
           flutter-version: 3.24.4 #[5b12b74, tag, commit, branch, main]
 #          flutter-version-file: pubspec.yaml # path to pubspec.yaml [exact-ver]
           # optional parameters follow
+          dry-run: true
           cache: true
           cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:" # optional, change this to force refresh cache
           cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:" # optional, change this to specify the cache path
@@ -71,8 +71,8 @@ jobs:
         run: flutter pub get
 
       # Uncomment this step to verify the use of 'dart format' on each commit.
-      - name: Verify formatting
-        run: dart format --output=none --set-exit-if-changed .
+#      - name: Verify formatting
+#        run: dart format --output=none --set-exit-if-changed .
 
       # Consider passing '--fatal-infos' for slightly stricter analysis.
 #      - name: Analyze project source

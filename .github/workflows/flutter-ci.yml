@@ -90,9 +90,9 @@ jobs:
         run: flutter build apk --release
 #      - name: Start Android Release Build
 #        run: flutter build appbundle
-#      - name: Build ios file
+#      - name: Build ios app
 #        run: flutter build ios --release --no-codesign
-#      - name: Build web file
+#      - name: Build web app
 #        run: flutter build web
 
       # Upload generated apk to the artifacts

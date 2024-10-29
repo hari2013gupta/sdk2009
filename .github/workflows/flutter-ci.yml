@@ -40,7 +40,7 @@ jobs:
 
       - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
       - name: Setup Flutter Environment
-        uses: subosito/flutter-action@v2
+        uses: subosito/flutter-action@v4
         id: flutter-action
         with:
           channel: stable # [dev, beta]

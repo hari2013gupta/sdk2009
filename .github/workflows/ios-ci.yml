@@ -87,5 +87,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ios-releases
-          path: example/build/ios/iphoneos/Runner.app
+          path: |
+            example/build/ios/iphoneos/Runner.app
+            example/build/ios_build.tar.g
           if-no-files-found: error

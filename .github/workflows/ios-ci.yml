@@ -3,7 +3,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Web-CI
+name: Ios-CI
 
 # This workflow is triggered on pushes to the repository.
 
@@ -41,4 +41,5 @@ jobs:
           architecture: x64
             - run: flutter pub get
             - run: flutter test
+            - run: cd example
             - run: flutter build ios - release - no-codesign

@@ -3,7 +3,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Flutter-CI
+name: Android-CI
 
 # This workflow is triggered on pushes to the repository.
 

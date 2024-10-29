@@ -38,7 +38,7 @@ jobs:
         with:
           channel: stable # [dev, beta]
 #          dry-run: true
-          flutter-version: 3.19.0 #[5b12b74, tag, commit, branch, main]
+          flutter-version: 3.24.3 #[5b12b74, tag, commit, branch, main]
 #          flutter-version-file: pubspec.yaml # path to pubspec.yaml [exact-ver]
           # optional parameters follow
 #          cache: true

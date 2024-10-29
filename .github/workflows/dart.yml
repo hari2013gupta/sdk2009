@@ -32,7 +32,7 @@ jobs:
           flutter-version: 3.24.4 #[5b12b74, tag, commit, branch, main]
 #          flutter-version-file: pubspec.yaml # path to pubspec.yaml [exact-ver]
           # optional parameters follow
-#          cache: true
+          cache: true
 
       - name: Get Flutter Version
         run: flutter --version

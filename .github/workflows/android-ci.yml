@@ -38,6 +38,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
+            cd example
             ~/.gradle/caches
             ~/.gradle/wrapper
 
@@ -76,6 +77,7 @@ jobs:
       - name: Install dependencies
         run: |
           flutter --version
+          flutter doctor
           flutter pub get
 
       # Your project will need to have tests in test/ and a dependency on
@@ -98,5 +100,5 @@ jobs:
         with:
           name: app-release
 #          path: build
-          path: build/app/outputs/flutter-apk/
+          path: build/app/outputs/flutter-apk
 #          if-no-files-found: error

@@ -85,7 +85,9 @@ jobs:
         run: flutter test
 
       - name: Build Android apk
-        run: flutter build apk
+        run: |
+          cd example
+          flutter build apk
 
 #      - name: Start Android Release Build
 #        run: cd example && flutter build appbundle

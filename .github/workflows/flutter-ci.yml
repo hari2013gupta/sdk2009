@@ -21,10 +21,10 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v4
       # Setup Java environment in order to build the Android app.
-#      - name: Setup Java 12x
-#        uses: actions/setup-java@v1
-#        with:
-#          java-version: '12.x'
+      - name: Setup Java 12x
+        uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
 
       # Note: This workflow uses the latest stable version of the Dart SDK.
       # You can specify other versions if desired, see documentation here:
@@ -37,15 +37,15 @@ jobs:
         id: flutter-action
         with:
           channel: stable # [dev, beta]
-#          dry-run: true
+          dry-run: true
           flutter-version: 3.24.4 #[5b12b74, tag, commit, branch, main]
 #          flutter-version-file: pubspec.yaml # path to pubspec.yaml [exact-ver]
           # optional parameters follow
-#          cache: true
-#          cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:" # optional, change this to force refresh cache
-#          cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:" # optional, change this to specify the cache path
-#          pub-cache-key: "flutter-pub:os:-:channel:-:version:-:arch:-:hash:" # optional, change this to force refresh cache of dart pub get dependencies
-#          pub-cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:" # optional, change this to specify the cache path
+          cache: true
+          cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:" # optional, change this to force refresh cache
+          cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:" # optional, change this to specify the cache path
+          pub-cache-key: "flutter-pub:os:-:channel:-:version:-:arch:-:hash:" # optional, change this to force refresh cache of dart pub get dependencies
+          pub-cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:" # optional, change this to specify the cache path
       - name: Print outputs - Command shell
         shell: bash
         run: |
@@ -64,8 +64,8 @@ jobs:
         run: flutter pub get
 
       # Uncomment this step to verify the use of 'dart format' on each commit.
-#      - name: Verify formatting
-#        run: dart format --output=none --set-exit-if-changed .
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
 
       # Consider passing '--fatal-infos' for slightly stricter analysis.
 #      - name: Analyze project source
@@ -77,18 +77,18 @@ jobs:
       - name: Run tests
         run: flutter test
 
-#      - name: Build apk file
-#        run: flutter build apk
-#      - name: Build appbundle file
-#        run: flutter build appbundle
+      - name: Build apk file
+        run: flutter build apk
+      - name: Build appbundle file
+        run: flutter build appbundle
 #      - name: Build ios file
 #        run: flutter build ios --release --no-codesign
 #      - name: Build web file
 #        run: flutter build web
 
       # Upload generated apk to the artifacts
-#      - name: Upload apk file
-#        uses: actions/upload-artifact@v1
-#        with:
-#          name: release-apk
-#          path: build/app/outputs/apk/release/app-release.apk
+      - name: Upload apk file
+        uses: actions/upload-artifact@v1
+        with:
+          name: release-apk
+          path: build/app/outputs/apk/release/app-release.apk

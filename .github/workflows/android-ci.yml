@@ -99,6 +99,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-release
-#          path: build
-          path: build/app/outputs/flutter-apk/
+          path: build
+#          path: build/app/outputs/flutter-apk/app-release.apk
 #          if-no-files-found: error

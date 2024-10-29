@@ -38,6 +38,21 @@ jobs:
           # optional parameters follow
           cache: true
           architecture: x64
+          cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:" # optional, change this to force refresh cache
+          cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:" # optional, change this to specify the cache path
+          pub-cache-key: "flutter-pub:os:-:channel:-:version:-:arch:-:hash:" # optional, change this to force refresh cache of dart pub get dependencies
+          pub-cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:" # optional, change this to specify the cache path
+
+      - name: Print outputs - Command shell
+        shell: bash
+        run: |
+          echo CACHE-PATH=${{ steps.flutter-action.outputs.CACHE-PATH }}
+          echo CACHE-KEY=${{ steps.flutter-action.outputs.CACHE-KEY }}
+          echo CHANNEL=${{ steps.flutter-action.outputs.CHANNEL }}
+          echo VERSION=${{ steps.flutter-action.outputs.VERSION }}
+          echo ARCHITECTURE=${{ steps.flutter-action.outputs.ARCHITECTURE }}
+          echo PUB-CACHE-PATH=${{ steps.flutter-action.outputs.PUB-CACHE-PATH }}
+          echo PUB-CACHE-KEY=${{ steps.flutter-action.outputs.PUB-CACHE-KEY }}
 
       - name: Flutter version
         run: |
@@ -62,9 +77,9 @@ jobs:
 #          keychain-password: ${{ secrets.IOS_GITHUB_KEYCHAIN_PASSWORD }}
 
       # Upload generated apk to the artifacts
-#      - name: Upload IOS Release Build
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: release-build
-#          path: example/build/app/outputs/flutter-apk/app-release.apk
-#          if-no-files-found: error
+      - name: Upload IOS Release Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-build
+          path: example/build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error

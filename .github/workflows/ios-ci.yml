@@ -39,7 +39,8 @@ jobs:
           # optional parameters follow
           cache: true
           architecture: x64
-            - run: flutter pub get
-            - run: flutter test
-            - run: cd example
-            - run: flutter build ios - release - no-codesign
+
+      - run: flutter pub get
+      - run: flutter test
+      - run: cd example
+      - run: flutter build ios - release - no-codesign

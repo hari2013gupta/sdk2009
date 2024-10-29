@@ -57,8 +57,8 @@ jobs:
           path: ./build/web
 
     # deploy:
-    name: Deploy Web Build
-      - needs: build
+#    name: Deploy Web Build
+#      - needs: build
 
       - name: Download Web Release
         uses: actions/download-artifact@v2

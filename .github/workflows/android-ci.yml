@@ -59,10 +59,10 @@ jobs:
 #          flutter-version-file: pubspec.yaml # path to pubspec.yaml [exact-ver]
           # optional parameters follow
           cache: true
-#          cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:" # optional, change this to force refresh cache
-#          cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:" # optional, change this to specify the cache path
-#          pub-cache-key: "flutter-pub:os:-:channel:-:version:-:arch:-:hash:" # optional, change this to force refresh cache of dart pub get dependencies
-#          pub-cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:" # optional, change this to specify the cache path
+          cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:" # optional, change this to force refresh cache
+          cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:" # optional, change this to specify the cache path
+          pub-cache-key: "flutter-pub:os:-:channel:-:version:-:arch:-:hash:" # optional, change this to force refresh cache of dart pub get dependencies
+          pub-cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:" # optional, change this to specify the cache path
 
       - name: Print outputs - Command shell
         shell: bash
@@ -86,19 +86,16 @@ jobs:
       - name: Run tests
         run: flutter test
 
-      - name: Build Android apk
+      - name: Start Android Release Build
         run: |
           cd example
           flutter build apk
-
-#      - name: Start Android Release Build
-#        run: cd example && flutter build appbundle
+#          flutter build appbundle
 
 #       Upload generated apk to the artifacts
-      - name: Upload release build
+      - name: Upload Android Release Build
         uses: actions/upload-artifact@v4
         with:
           name: app-release
-#          path: build
           path: example/build/app/outputs/flutter-apk/app-release.apk
-#          if-no-files-found: error
+          if-no-files-found: error

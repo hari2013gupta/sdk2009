@@ -101,9 +101,12 @@ jobs:
 #          flutter build appbundle
 
 #       Upload generated apk to the artifacts
-      - name: Upload Android Release Build
+      - name: Upload Android Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: app-release
-          path: example/build/app/outputs/flutter-apk/app-release.apk
+          name: android-releases
+          path: |            
+            example/build/app/outputs/flutter-apk/app-release.apk
+            example/build/app/outputs/bundle/release/app-release.aab
+            build/ios_build.tar.g
           if-no-files-found: error

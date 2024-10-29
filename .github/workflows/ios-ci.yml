@@ -76,8 +76,13 @@ jobs:
 #          provisioning-profile-base64: ${{ secrets.IOS_MOBILE_PROVISIONING_PROFILE_BASE64 }}
 #          keychain-password: ${{ secrets.IOS_GITHUB_KEYCHAIN_PASSWORD }}
 
+#      - name: Compress Archives and IPAs
+#        run: |
+#          cd build
+#          tar -czf ios_build.tar.gz ios
+
       # Upload generated apk to the artifacts
-      - name: Upload IOS Release Build
+      - name: Upload IOS Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: release-build

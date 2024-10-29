@@ -66,7 +66,9 @@ jobs:
           echo PUB-CACHE-KEY=${{ steps.flutter-action.outputs.PUB-CACHE-KEY }}
 
       - name: Get Flutter Version
-        run: flutter --version
+        run: |
+          flutter --version
+          flutter doctor
 
       - name: Install dependencies
         run: flutter pub get
@@ -95,6 +97,9 @@ jobs:
 #        run: cd example && flutter build appbundle
 #      - name: Build ios app
 #        run: flutter build ios --release --no-codesign
+
+      # goto plugin folder
+      - run: cd ..
 
 #       Upload generated apk to the artifacts
       - name: Upload release build

@@ -17,13 +17,14 @@ on:
 
 jobs:
   build:
+    name: Android Build & Release
     runs-on: ubuntu-latest
 
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
       # Setup Java environment in order to build the Android app.
-      - name: Setup Java
+      - name: Setup Java Environment
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin' # [zulu, oracle] [12.x, 17, 21]
@@ -76,6 +77,12 @@ jobs:
           echo PUB-CACHE-PATH=${{ steps.flutter-action.outputs.PUB-CACHE-PATH }}
           echo PUB-CACHE-KEY=${{ steps.flutter-action.outputs.PUB-CACHE-KEY }}
 
+
+        #5 Setup Keystore
+      - name: Decode Keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > example/android/app/keystore.jks
+
       - name: Create key.properties
         run: |
           echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" > android/key.properties
@@ -94,19 +101,37 @@ jobs:
       - name: Run tests
         run: flutter test
 
+      # Create Build [apk and aab]
       - name: Start Android Release Build
         run: |
           cd example
           flutter build apk --release
 #          flutter build appbundle
 
+        # Build IPA ( IOS Build )
+#      - name: Build IPA
+#        run: flutter build ipa --no-codesign
+
+#      - name: Compress Archives and IPAs
+#        run: |
+#          cd build
+#          tar -czf ios_build.tar.gz ios
+
+      # Create Release
+#      - name: Create Release
+#        uses: ncipollo/release-action@v1
+#        with:
+#          artifacts: "example/build/app/outputs/flutter-apk/app-release.apk,example/build/app/outputs/bundle/release/app-release.aab,example/build/ios_build.tar.gz"
+#          tag: v${{ env.VERSION }}
+#          token: ${{ secrets.TOKEN }}
+
 #       Upload generated apk to the artifacts
-      - name: Upload Android Artifacts
+      - name: Upload Android Build to Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: android-releases
           path: |            
             example/build/app/outputs/flutter-apk/app-release.apk
             example/build/app/outputs/bundle/release/app-release.aab
-            build/ios_build.tar.g
+#            example/build/ios_build.tar.g
           if-no-files-found: error

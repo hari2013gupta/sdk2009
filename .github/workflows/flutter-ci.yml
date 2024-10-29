@@ -13,6 +13,8 @@ on:
   pull_request:
     branches: [ "main" ]
 
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -24,7 +26,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: 'zulu' # [temurin]
           java-version: '21'
 #          cache: 'gradle'
 #          cache-dependency-path: | # optional
@@ -84,9 +86,9 @@ jobs:
       - name: Run tests
         run: flutter test
 
-      - name: Build apk file
-        run: flutter build apk
-      - name: Build appbundle file
+#      - name: Build apk file
+#        run: flutter build apk
+      - name: Start Release Build
         run: flutter build appbundle
 #      - name: Build ios file
 #        run: flutter build ios --release --no-codesign

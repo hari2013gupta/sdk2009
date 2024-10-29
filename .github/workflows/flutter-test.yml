@@ -24,7 +24,7 @@ jobs:
       # https://github.com/dart-lang/setup-dart/blob/main/README.md
       # - uses: dart-lang/setup-dart@v1
 
-      - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
+#      - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -35,7 +35,9 @@ jobs:
           cache: true
 
       - name: Get Flutter Version
-        run: flutter --version
+        run: |
+          flutter --version
+          flutter doctor
 
       - name: Install dependencies
         run: flutter pub get
@@ -45,8 +47,9 @@ jobs:
       #   run: dart format --output=none --set-exit-if-changed .
 
       # Consider passing '--fatal-infos' for slightly stricter analysis.
-#      - name: Analyze project source
-#        run: flutter analyze
+      - name: Analyze project source
+        run: flutter analyze
+      # run: flutter analyze --no-fatal-infos --no-fatal-warnings
 
       # Your project will need to have tests in test/ and a dependency on
       # package:test for this step to succeed. Note that Flutter projects will

@@ -53,7 +53,7 @@ jobs:
         id: flutter-action
         with:
           channel: stable # [dev, beta]
-          flutter-version: 3.24.4 #[5b12b74, tag, commit, branch, main]
+          flutter-version: 3.24.4 # [5b12b74, tag, commit, branch, main]
 #          flutter-version-file: pubspec.yaml # path to pubspec.yaml [exact-ver]
           # optional parameters follow
           cache: true
@@ -61,6 +61,7 @@ jobs:
 #          cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:" # optional, change this to specify the cache path
 #          pub-cache-key: "flutter-pub:os:-:channel:-:version:-:arch:-:hash:" # optional, change this to force refresh cache of dart pub get dependencies
 #          pub-cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:" # optional, change this to specify the cache path
+
       - name: Print outputs - Command shell
         shell: bash
         run: |
@@ -72,22 +73,10 @@ jobs:
           echo PUB-CACHE-PATH=${{ steps.flutter-action.outputs.PUB-CACHE-PATH }}
           echo PUB-CACHE-KEY=${{ steps.flutter-action.outputs.PUB-CACHE-KEY }}
 
-      - name: Get Flutter Version
+      - name: Install dependencies
         run: |
           flutter --version
-          flutter doctor
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      # Uncomment this step to verify the use of 'dart format' on each commit.
-#      - name: Verify formatting
-#        run: dart format --output=none --set-exit-if-changed .
-
-      # Consider passing '--fatal-infos' for slightly stricter analysis.
-      - name: Analyze project source
-        run: flutter analyze
-#        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+          flutter pub get
 
       # Your project will need to have tests in test/ and a dependency on
       # package:test for this step to succeed. Note that Flutter projects will
@@ -102,8 +91,6 @@ jobs:
 
 #      - name: Start Android Release Build
 #        run: cd example && flutter build appbundle
-#      - name: Build ios app
-#        run: flutter build ios --release --no-codesign
 
 #       Upload generated apk to the artifacts
       - name: Upload release build
@@ -111,28 +98,3 @@ jobs:
         with:
           name: release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
-
-#      - name: Build web app
-#        run: flutter build web
-#      - name: Upload Web Build Files
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: web-release
-#          path: ./build/web
-
-#  deploy:
-#    name: Deploy Web Build
-#    needs: build
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Download Web Release
-#        uses: actions/download-artifact@v2
-#        with:
-#          name: web-release
-#
-#      - name: Deploy to gh-pages
-#        uses: peaceiris/actions-gh-pages@v3
-#        with:
-#          github_token: ${{ secrets.GITHUB_TOKEN }}
-#          publish_dir: ./

@@ -14,10 +14,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Clone repository
-#        uses: actions/checkout@v4
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
 #
 #      # Note: This workflow uses the latest stable version of the Dart SDK.
 #      # You can specify other versions if desired, see documentation here:

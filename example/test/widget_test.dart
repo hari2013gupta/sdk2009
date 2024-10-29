@@ -11,7 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sdk2009_example/src/my_app.dart';
 
 void main() {
-  testWidgets('Verify Platform version', (WidgetTester tester) async {
+  testWidgets('Verify Platform info', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());
 
@@ -19,7 +19,7 @@ void main() {
     expect(
       find.byWidgetPredicate(
         (Widget widget) =>
-            widget is Text && widget.data!.startsWith('Running on:'),
+            widget is Text && widget.data!.startsWith('WebView App'),
       ),
       findsOneWidget,
     );

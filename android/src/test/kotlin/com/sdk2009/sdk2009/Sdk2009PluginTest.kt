@@ -18,7 +18,7 @@ internal class Sdk2009PluginTest {
   fun onMethodCall_getPlatformVersion_returnsExpectedValue() {
     val plugin = Sdk2009Plugin()
 
-    val call = MethodCall("getPlatformVersion", null)
+    val call = MethodCall("get_platform_info", null)
     val mockResult: MethodChannel.Result = Mockito.mock(MethodChannel.Result::class.java)
     plugin.onMethodCall(call, mockResult)
 

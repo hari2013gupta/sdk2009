@@ -86,6 +86,12 @@ class MockSdk2009Platform
     // TODO: implement showNativeCustomAlert
     throw UnimplementedError();
   }
+
+  @override
+  Stream<String> streamAnyFromNative() {
+    // TODO: implement streamAnyFromNative
+    throw UnimplementedError();
+  }
 }
 
 void main() {
@@ -101,7 +107,7 @@ void main() {
     Sdk2009Platform.instance = fakePlatform;
 
     final info = {'battery_level': 101, 'platform_android': '42'};
-    stderr.writeln('print me');
+    stderr.writeln('print me: $info');
     expect(await sdk2009Plugin.getPlatformInfo(), info.toString());
   });
 }

@@ -66,6 +66,10 @@ abstract class Sdk2009Platform extends PlatformInterface {
     throw UnimplementedError('timerFromNative() has not been implemented.');
   }
 
+  Stream<String> streamAnyFromNative() {
+    throw UnimplementedError('anyFromNative() has not been implemented.');
+  }
+
   Stream<String> streamLocationFromNative() {
     throw UnimplementedError('locationFromNative() has not been implemented.');
   }

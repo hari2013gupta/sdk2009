@@ -12,6 +12,9 @@ class MethodChannelSdk2009 extends Sdk2009Platform {
   // timeHandlerEvent event name. it should be same on Android, IOS and Flutter
   final timeEventChannel = const EventChannel('time_handler_event');
 
+  // timeHandlerEvent event name. it should be same on Android, IOS and Flutter
+  final anyEventChannel = const EventChannel('any_handler_event');
+
   // locationHandlerEvent event name. it should be same on Android, IOS and Flutter
   final locationEventChannel = const EventChannel('location_handler_event');
 
@@ -83,6 +86,13 @@ class MethodChannelSdk2009 extends Sdk2009Platform {
   @override
   Stream<String> streamTimeFromNative() {
     return timeEventChannel
+        .receiveBroadcastStream()
+        .map((event) => event.toString());
+  }
+
+  @override
+  Stream<String> streamAnyFromNative() {
+    return anyEventChannel
         .receiveBroadcastStream()
         .map((event) => event.toString());
   }

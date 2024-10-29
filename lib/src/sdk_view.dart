@@ -2,7 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sdk2009/plugin/sdk2009_lib.dart';
+import 'package:sdk2009/sdk2009.dart';
+import 'package:sdk2009/src/singleton/generic_event_bus.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class SdkView extends StatefulWidget {
@@ -244,15 +245,15 @@ The navigation delegate is set to block navigation to the youtube website.
 
   Future<void> pageFinishedCallback(s) async {
     isLoading = false;
-    if(!context.mounted){
-      return;
-    }
-    // dynamic p2 = ResponseSuccessResponse(
-    //     'paymentIdu111', 'orderId3333', 'signature2222');
-    //
-    // MultiEventBus.getInstance().emit<ResponseSuccessResponse>(p2);
+    // if(!context.mounted){
+    //   return;
+    // }
+    dynamic p2 = ResponseSuccessResponse(
+        'paymentIdu111', 'orderId3333', 'signature2222');
+    GenericEventBus.getInstance().emit<ResponseSuccessResponse>(p2);
 
-    Future.delayed(Duration.zero, () => Navigator.pop(context, s));
+    Navigator.pop(context, s);
+    // Future.delayed(Duration.zero, () => Navigator.pop(context, s));
   }
 
   void listenVerificationCodeFromNative() {

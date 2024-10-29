@@ -34,6 +34,12 @@ jobs:
 #            sub-project/**/gradle-wrapper.properties
 #      - name: Build with gradle
 #        run: ./gradlew build --no-daemon
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
 
       # Note: This workflow uses the latest stable version of the Dart SDK.
       # You can specify other versions if desired, see documentation here:
@@ -88,13 +94,13 @@ jobs:
       - name: Run tests
         run: flutter test
 
-      - name: Build Android apk
-        run: |
-          cd example
-          flutter build apk
+#      - name: Build Android apk
+#        run: |
+#          cd example
+#          flutter build apk
 
-#      - name: Start Android Release Build
-#        run: cd example && flutter build appbundle
+      - name: Start Android Release Build
+        run: cd example && flutter build appbundle
 #      - name: Build ios app
 #        run: flutter build ios --release --no-codesign
 

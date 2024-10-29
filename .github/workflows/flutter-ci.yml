@@ -27,7 +27,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu' # [temurin]
-          java-version: '12.x'
+          java-version: '21'
           cache: 'gradle'
 #          cache-dependency-path: | # optional
 #            sub-project/*.gradle*
@@ -49,7 +49,6 @@ jobs:
           flutter-version: 3.24.4 #[5b12b74, tag, commit, branch, main]
 #          flutter-version-file: pubspec.yaml # path to pubspec.yaml [exact-ver]
           # optional parameters follow
-#          dry-run: true
           cache: true
 #          cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:" # optional, change this to force refresh cache
 #          cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:" # optional, change this to specify the cache path
@@ -86,21 +85,26 @@ jobs:
       - name: Run tests
         run: flutter test
 
-      - name: Build app
-        run: flutter build
-
-#      - name: Build apk file
+#      - name: Build android apk
 #        run: flutter build apk
-      - name: Start Android Release Build
-        run: flutter build appbundle
+
+#      - name: Start Android Release Build
+#        run: flutter build appbundle
 #      - name: Build ios app
 #        run: flutter build ios --release --no-codesign
-#      - name: Build web app
-#        run: flutter build web
 
       # Upload generated apk to the artifacts
-      - name: Upload release build
+#      - name: Upload release build
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: release-apk
+#          path: build/app/outputs/apk/release/app-release.apk
+
+
+      - name: Build web app
+        run: flutter build web
+      - name: Upload Web Build Files
         uses: actions/upload-artifact@v4
         with:
-          name: release-apk
-          path: build/app/outputs/apk/release/app-release.apk
+          name: web-release
+          path: ./build/web

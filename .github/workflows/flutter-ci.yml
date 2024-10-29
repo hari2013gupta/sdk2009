@@ -98,9 +98,6 @@ jobs:
 #      - name: Build ios app
 #        run: flutter build ios --release --no-codesign
 
-      # goto plugin folder
-      - run: cd ..
-
 #       Upload generated apk to the artifacts
       - name: Upload release build
         uses: actions/upload-artifact@v4

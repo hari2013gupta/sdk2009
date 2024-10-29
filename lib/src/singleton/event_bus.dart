@@ -1,14 +1,13 @@
 // event_bus.dart
-/**
- *
-    // Declare: Listen to the global event bus
-    EventBus.getInstance().stream.listen((message) {
-    print(message); // Update UI based on the event
-    });
-    }
-    // Uses: emit event
-    EventBus.getInstance().emit("Event triggered!"); // Emit an event
- * */
+///
+/// // Declare: Listen to the global event bus
+/// EventBus.getInstance().stream.listen((message) {
+/// debugPrint(message); // Update UI based on the event
+/// });
+/// }
+/// // Uses: emit event
+/// EventBus.getInstance().emit("Event triggered!"); // Emit an event
+///
 library;
 
 import 'dart:async';

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:sdk2009/sdk2009.dart';
 import 'package:sdk2009/src/sdk_view.dart';
 import 'package:sdk2009/src/singleton/generic_event_bus.dart';
+import 'package:sdk2009/src/singleton/multi_event_bus.dart';
 
 import 'sdk2009_platform_interface.dart';
 
@@ -122,8 +123,8 @@ class Sdk2009 {
       dynamic payloadSuccess = ResponseSuccessResponse(
           'paymentIdu111', 'orderId3333', 'signature2222');
 
-      // MultiEventBus().emit<ResponseSuccessResponse>(successPayload);
-      GenericEventBus().emit<ResponseSuccessResponse>(payloadSuccess);
+      MultiEventBus().emit<ResponseSuccessResponse>(payloadSuccess);
+      GenericEventBus().emit<ResponseFailureResponse>(payloadFailed);
       // GlobalEventBus<ResponseFailureResponse>().emit(payloadFailed);
     }).catchError((onError) {});
   }

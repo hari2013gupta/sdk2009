@@ -86,20 +86,22 @@ jobs:
       - name: Run tests
         run: flutter test
 
-      - name: Build android apk
-        run: cd example && flutter build appbundle
+      - name: Build Android apk
+        run: |
+          cd example
+          flutter build apk
 
 #      - name: Start Android Release Build
-#        run: flutter build appbundle
+#        run: cd example && flutter build appbundle
 #      - name: Build ios app
 #        run: flutter build ios --release --no-codesign
 
-      # Upload generated apk to the artifacts
-#      - name: Upload release build
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: release-apk
-#          path: build/app/outputs/apk/release/app-release.apk
+#       Upload generated apk to the artifacts
+      - name: Upload release build
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-apk
+          path: build/app/outputs/apk/release/app-release.apk
 
 #      - name: Build web app
 #        run: flutter build web

@@ -86,10 +86,13 @@ jobs:
       - name: Run tests
         run: flutter test
 
-      - name: Build apk file
-        run: flutter build apk --release
-#      - name: Start Android Release Build
-#        run: flutter build appbundle
+      - name: Build app
+        run: flutter build
+
+#      - name: Build apk file
+#        run: flutter build apk
+      - name: Start Android Release Build
+        run: flutter build appbundle
 #      - name: Build ios app
 #        run: flutter build ios --release --no-codesign
 #      - name: Build web app

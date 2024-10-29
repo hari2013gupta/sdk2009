@@ -24,7 +24,14 @@ jobs:
       - name: Setup Java 12x
         uses: actions/setup-java@v4
         with:
-          java-version: '12.x'
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'gradle'
+          cache-dependency-path: | # optional
+            sub-project/*.gradle*
+            sub-project/**/gradle-wrapper.properties
+      - name: Build with gradle
+        run: ./gradlew build --no-daemon
 
       # Note: This workflow uses the latest stable version of the Dart SDK.
       # You can specify other versions if desired, see documentation here:

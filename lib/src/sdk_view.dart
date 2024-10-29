@@ -245,15 +245,14 @@ The navigation delegate is set to block navigation to the youtube website.
 
   Future<void> pageFinishedCallback(s) async {
     isLoading = false;
-    // if(!context.mounted){
-    //   return;
-    // }
     dynamic p2 = ResponseSuccessResponse(
         'paymentIdu111', 'orderId3333', 'signature2222');
     GenericEventBus.getInstance().emit<ResponseSuccessResponse>(p2);
 
-    Navigator.pop(context, s);
-    // Future.delayed(Duration.zero, () => Navigator.pop(context, s));
+    if (context.mounted) {
+      Navigator.pop(context, s);
+      // Future.delayed(Duration.zero, () => Navigator.pop(context, s));
+    }
   }
 
   void listenVerificationCodeFromNative() {

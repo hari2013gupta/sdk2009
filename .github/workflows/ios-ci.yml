@@ -50,7 +50,16 @@ jobs:
       - name: Start IOS Release Build
         run: |
           cd example
-          flutter build ios --release -no-codesign
+          flutter build ios --release --no-codesign
+
+#      - uses: cedvdb/action-flutter-build-ios@v1
+#        with:
+#          # always use --export-options-plist=ios/GithubActionsExportOptions.plist
+#          build-cmd: flutter build ipa --release --flavor dev --export-options-plist=ios/GithubActionsExportOptions.plist
+#          certificate-base64: ${{ secrets.IOS_BUILD_CERTIFICATE_BASE64 }}
+#          certificate-password: ${{ secrets.IOS_BUILD_CERTIFICATE_PASSWORD }}
+#          provisioning-profile-base64: ${{ secrets.IOS_MOBILE_PROVISIONING_PROFILE_BASE64 }}
+#          keychain-password: ${{ secrets.IOS_GITHUB_KEYCHAIN_PASSWORD }}
 
       # Upload generated apk to the artifacts
 #      - name: Upload IOS Release Build

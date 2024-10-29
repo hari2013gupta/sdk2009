@@ -9,9 +9,9 @@ name: Android-CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main" ] # [dev,test]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main" ] # [dev,test]
 
   workflow_dispatch:
 
@@ -26,7 +26,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin' # [zulu]
+          distribution: 'temurin' # [zulu, oracle] [12.x, 17, 21]
           java-version: '21'
           cache: 'gradle'
 #          cache-dependency-path: | # optional
@@ -75,6 +75,13 @@ jobs:
           echo ARCHITECTURE=${{ steps.flutter-action.outputs.ARCHITECTURE }}
           echo PUB-CACHE-PATH=${{ steps.flutter-action.outputs.PUB-CACHE-PATH }}
           echo PUB-CACHE-KEY=${{ steps.flutter-action.outputs.PUB-CACHE-KEY }}
+
+      - name: Create key.properties
+        run: |
+          echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" > android/key.properties
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/key.properties
+          echo "storeFile=keystore.jks" >> android/key.properties
 
       - name: Install dependencies
         run: |

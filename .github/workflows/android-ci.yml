@@ -97,7 +97,7 @@ jobs:
       - name: Start Android Release Build
         run: |
           cd example
-          flutter build apk
+          flutter build apk --release
 #          flutter build appbundle
 
 #       Upload generated apk to the artifacts

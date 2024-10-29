@@ -81,10 +81,10 @@ jobs:
 #          cd build
 #          tar -czf ios_build.tar.gz ios
 
-      # Upload generated apk to the artifacts
+      # Upload generated ipk to the artifacts
       - name: Upload IOS Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: release-build
+          name: ios-releases
           path: example/build/ios/iphoneos/Runner.app
           if-no-files-found: error

@@ -16,13 +16,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Clone repository
+        uses: actions/checkout@v4
 
       # Note: This workflow uses the latest stable version of the Dart SDK.
       # You can specify other versions if desired, see documentation here:
       # https://github.com/dart-lang/setup-dart/blob/main/README.md
       # - uses: dart-lang/setup-dart@v1
+
       - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable # [dev, beta]
+          flutter-version: 3.19.0 #[5b12b74, tag, commit, branch, main]
+#          flutter-version-file: pubspec.yaml # path to pubspec.yaml [exact-ver]
+          # optional parameters follow
+#          cache: true
+
+      - name: Get Flutter Version
+        run: flutter --version
 
       - name: Install dependencies
         run: flutter pub get
@@ -40,3 +53,12 @@ jobs:
       # want to change this to 'flutter test'.
       - name: Run tests
         run: flutter test
+
+#      - name: Build apk file
+#        run: flutter build apk
+      - name: Build appbundle file
+        run: flutter build appbundle
+      - name: Build ios file
+        run: flutter build ios --release --no-codesign
+      - name: Build web file
+        run: flutter build web

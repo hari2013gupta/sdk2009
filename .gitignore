@@ -16,6 +16,7 @@ migrate_working_dir/
 *.iws
 .idea/
 
+
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
 # is commented out by default.
@@ -27,3 +28,6 @@ migrate_working_dir/
 **/doc/api/
 .dart_tool/
 build/
+.github/workflows/flutter-ci.yml
+.github/workflows/ios-ci.yml
+.github/workflows/web-ci.yml

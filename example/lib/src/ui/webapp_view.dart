@@ -13,27 +13,15 @@ class WebappView extends StatelessWidget implements PluginCallback {
 
     CallbackFunction cf = CallbackFunction(
       onSuccessCallback: (ResponseSuccessResponse response) {
-        log("Received eventSuccessMessage event: ${response.paymentId}");
+        log("fn Received eventSuccessMessage event: ${response.paymentId}");
         // plugin.showNativeAlert('Successful response', 'code: SUCCESS', 'yes_no');
       },
       onFailedCallback: (ResponseFailureResponse response) {
-        log("Received eventSuccessMessage event: ${response.code},${response.message},${response.error}");
+        log("fn Received eventSuccessMessage event: ${response.code},${response.message},${response.error}");
         // plugin.showNativeAlert('Error response${response.code}',
         //     '${response.message}${response.error}', 'yes_no');
       },
     );
-
-    //Handle Responses
-    void handleResponseError(ResponseFailureResponse response) {
-      log("Received eventSuccessMessage event: ${response.code},${response.message},${response.error}");
-      // plugin.showNativeAlert('Error response${response.code}',
-      //     '${response.message}${response.error}', 'yes_no');
-    }
-
-    void handleResponseSuccess(ResponseSuccessResponse response) {
-      log("Received eventSuccessMessage event: success");
-      // plugin.showNativeAlert('Successful response', 'code: SUCCESS', 'yes_no');
-    }
 
     // Register this class as the callback (this is done in plugin side)
     // plugin.setCallback(this);
@@ -58,7 +46,7 @@ class WebappView extends StatelessWidget implements PluginCallback {
   void onFailed(ResponseFailureResponse failedResponse) {
     // TODO: implement onFailed
 
-    log("Received eventFailedMessage event: ${failedResponse.message}");
+    log("cb Received eventFailedMessage event: ${failedResponse.message}");
     // You can now handle the event, update UI, etc.
   }
 
@@ -66,7 +54,7 @@ class WebappView extends StatelessWidget implements PluginCallback {
   void onSuccess(ResponseSuccessResponse successResponse) {
     // TODO: implement onSuccess
 
-    log("Received eventSuccessMessage event: ${successResponse.paymentId}");
+    log("cb Received eventSuccessMessage event: ${successResponse.paymentId}");
     // You can now handle the event, update UI, etc.
   }
 }

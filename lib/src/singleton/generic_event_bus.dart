@@ -1,4 +1,19 @@
-// global_event_bus.dart
+// generic_event_bus.dart
+/**
+ *  Declare: register listener
+ *  GenericEventBus().registerListener<ResponseSuccessResponse>((event) {
+    debugPrint('event received :: ${event.paymentId}');
+    });
+    GenericEventBus().registerListener<ResponseFailureResponse>((event) {
+    debugPrint('event received :: ${event.message}');
+    });
+    uses: emit event
+    dynamic successEvent = ResponseSuccessResponse('paymentIdu111', 'orderId3333', 'signature2222');
+    GenericEventBus().emit<ResponseSuccessResponse>(successEvent);
+ * */
+
+library;
+
 import 'dart:async';
 
 typedef EventCallback<T> = void Function(T event);

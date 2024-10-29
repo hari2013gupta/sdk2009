@@ -1,4 +1,16 @@
-// global_stream_controller.dart
+// event_bus.dart
+/**
+ *
+    // Declare: Listen to the global event bus
+    EventBus.getInstance().stream.listen((message) {
+    print(message); // Update UI based on the event
+    });
+    }
+    // Uses: emit event
+    EventBus.getInstance().emit("Event triggered!"); // Emit an event
+ * */
+library;
+
 import 'dart:async';
 
 class EventBus {
@@ -30,4 +42,4 @@ class EventBus {
 }
 
 // Create an instance to use as a global stream bus
-final eventBus = EventBus();
+// final eventBus = EventBus();

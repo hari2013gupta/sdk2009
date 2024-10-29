@@ -80,39 +80,16 @@ class Sdk2009 {
     required CallbackFunction callbackFunction,
   }) {
     // Register listeners using the typedef
-    // GlobalEventBus<ResponseSuccessResponse>().registerListener((event) {
-    //   debugPrint('-----GlobalEventBus---received-----2');
-    //   debugPrint('event received :: ${event.paymentId}');
-    //   // _callback?.onSuccess(event);
-    //   // _callbackFunction?.onSuccessCallback(event);
-    // });
+    GenericEventBus().registerListener<ResponseSuccessResponse>((event) {
+      debugPrint('event received success :: ${event.paymentId}');
+      _callback?.onSuccess(event);
+      _callbackFunction?.onSuccessCallback(event);
+    });
 
-    // GenericEventBus().registerListener<ResponseSuccessResponse>((event) {
-    //   debugPrint('-----GenericEventBus---received-----2');
-    //   debugPrint('event received :: ${event.paymentId}');
-    //   // _callback?.onSuccess(event);
-    //   // _callbackFunction?.onSuccessCallback(event);
-    // });
-    // GlobalEventBus<ResponseFailureResponse>().registerListener((event) {
-    //   debugPrint('-----GlobalEventBus---received-----1');
-    //   debugPrint('event received :: ${event.message}');
-    //   // _callback?.onFailed(event); // Fire the callback
-    // });
-
-    // Register a single listener for multiple types
-    MultiEventBus()
-        .registerMultiTypeListener([ResponseSuccessResponse, ResponseFailureResponse], (event) {
-      if (event is ResponseSuccessResponse) {
-        log('-----MultiEventBus----event received :: ${event.paymentId}');
-        _callback?.onSuccess(event);
-        _callbackFunction?.onSuccessCallback(event);
-      } else if (event is ResponseFailureResponse) {
-        log('------MultiEventBus-----event received :: ${event.message}');
-        _callback?.onFailed(event);
-        _callbackFunction?.onFailedCallback(event);
-      } else {
-        log('event received :: Unknown event: $event');
-      }
+    GenericEventBus().registerListener<ResponseFailureResponse>((event) {
+      debugPrint('event received failed :: ${event.message}');
+      _callback?.onFailed(event); // Fire the callback
+      _callbackFunction?.onFailedCallback(event);
     });
 
     _callback = pluginCallback;
@@ -140,33 +117,17 @@ class Sdk2009 {
       builder: (context) => SdkView(url: paymentUrl),
     ))
         .then((s) {
-      // bus.emit('streamController');
+      String eventFailedMessage = "Plugin event failed triggered!";
+      Map<String, dynamic> data = {'err': 'hello error'};
+      dynamic payloadFailed = ResponseFailureResponse(
+          code: 11, message: eventFailedMessage, error: data);
 
-      // Simulate triggering an event
-      // String eventMessage = "paymentId";
-      // ResponseSuccessResponse eventSuccessMessage =
-      //     ResponseSuccessResponse(eventMessage, 'orderId', 'signature');
-      // _callback?.onSuccess(eventSuccessMessage);
-
-      // String eventFailedMessage = "Plugin event failed triggered!";
-      // Map<String, dynamic> data = {'err': 'hello error'};
-      // dynamic payload = ResponseFailureResponse(
-      //     code: 11, message: eventFailedMessage, error: data);
-      // _callback?.onSuccess(eventSuccessMessage);
-      // _callback?.onFailed(payload); // Fire the callback
-      // dynamic p2 = ResponseSuccessResponse(
-      //     'paymentId11111', 'orderId3333', 'signature2222');
-      //
-      // bus.emit(p2);
-      // }
-
-      dynamic successEvent = ResponseSuccessResponse(
+      dynamic payloadSuccess = ResponseSuccessResponse(
           'paymentIdu111', 'orderId3333', 'signature2222');
 
-      MultiEventBus().emit<ResponseSuccessResponse>(successEvent);
-
-      // GlobalEventBus<ResponseSuccessResponse>().emit(p2);
-      // GenericEventBus().emit<ResponseSuccessResponse>(successEvent);
+      // MultiEventBus().emit<ResponseSuccessResponse>(successPayload);
+      GenericEventBus().emit<ResponseSuccessResponse>(payloadSuccess);
+      // GlobalEventBus<ResponseFailureResponse>().emit(payloadFailed);
     }).catchError((onError) {});
   }
 }

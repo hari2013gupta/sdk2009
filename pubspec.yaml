@@ -18,8 +18,6 @@ dependencies:
   device_info_plus: ^10.1.2
   path_provider: ^2.1.4
   webview_flutter: ^4.10.0
-  events_emitter: ^0.5.2
-  eventify: ^1.0.1
 
 dev_dependencies:
   flutter_test:

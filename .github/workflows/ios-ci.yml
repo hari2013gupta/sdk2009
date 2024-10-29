@@ -50,7 +50,7 @@ jobs:
       - name: Start IOS Release Build
         run: |
           cd example
-          flutter build ios - release - no-codesign
+          flutter build ios --release -no-codesign
 
       # Upload generated apk to the artifacts
 #      - name: Upload IOS Release Build

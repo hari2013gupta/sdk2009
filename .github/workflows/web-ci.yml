@@ -1,23 +1,23 @@
-## This workflow uses actions that are not certified by GitHub.
-## They are provided by a third-party and are governed by
-## separate terms of service, privacy policy, and support
-## documentation.
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Web-CI
+
+# This workflow is triggered on pushes to the repository.
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
 #
-#name: Web-CI
-#
-## This workflow is triggered on pushes to the repository.
-#
-#on:
-#  push:
-#    branches: [ "main" ]
-#  pull_request:
-#    branches: [ "main" ]
-#
-#  workflow_dispatch:
-#
-#jobs:
-#  build:
-#    runs-on: ubuntu-latest
+jobs:
+  build:
+    runs-on: ubuntu-latest
 #
 #    steps:
 #      - name: Clone repository

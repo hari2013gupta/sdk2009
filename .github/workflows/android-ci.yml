@@ -118,8 +118,8 @@ jobs:
       - name: Start Android Release Build
         run: |
           cd example
-          flutter build apk --release
-#          flutter build appbundle
+#          flutter build apk --release
+          flutter build appbundle
 
         # Build IPA ( IOS Build )
 #      - name: Build IPA

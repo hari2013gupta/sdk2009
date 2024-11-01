@@ -90,7 +90,6 @@ jobs:
           echo PUB-CACHE-PATH=${{ steps.flutter-action.outputs.PUB-CACHE-PATH }}
           echo PUB-CACHE-KEY=${{ steps.flutter-action.outputs.PUB-CACHE-KEY }}
 
-
         #5 Setup Keystore
       - name: Decode Keystore
         run: |
@@ -115,11 +114,11 @@ jobs:
         run: flutter test
 
       # Create Build [apk and aab]
-      - name: Start Android Release Build
-        run: |
-          cd example
+#      - name: Start Android Release Build
+#        run: |
+#          cd example
 #          flutter build apk --release
-          flutter build appbundle
+#          flutter build appbundle
 
         # Build IPA ( IOS Build )
 #      - name: Build IPA
@@ -139,12 +138,12 @@ jobs:
 #          token: ${{ secrets.TOKEN }}
 
 #       Upload generated apk to the artifacts
-      - name: Upload Android Build to Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: android-releases
-          path: |            
-            example/build/app/outputs/flutter-apk/app-release.apk
-            example/build/app/outputs/bundle/release/app-release.aab
-#            example/build/ios_build.tar.g
-          if-no-files-found: error
+#      - name: Upload Android Build to Artifacts
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: android-releases
+#          path: |
+#            example/build/app/outputs/flutter-apk/app-release.apk
+#            example/build/app/outputs/bundle/release/app-release.aab
+##            example/build/ios_build.tar.g
+#          if-no-files-found: error

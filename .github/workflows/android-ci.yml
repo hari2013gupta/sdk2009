@@ -60,7 +60,6 @@ jobs:
       - name: Cache Gradle packages
         uses: actions/cache@v4
         with:
-          token: ${{ env.token }}
           path: |
             cd example
             cd android

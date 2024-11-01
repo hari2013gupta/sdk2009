@@ -7,6 +7,26 @@ name: Android-CI
 
 # This workflow is triggered on pushes to the repository.
 
+env:
+#  # The name of the main module repository
+#  main_project_module: app
+#  # token
+    token: ACCESS_TOKEN
+#  # The name of the Play Store
+#  playstore_name: Frogobox ID
+#
+#  # Keystore Path
+#  ks_path: frogoboxdev.jks
+#
+#  # Keystore Password
+#  ks_store_pass: cronoclez
+#
+#  # Keystore Alias
+#  ks_alias: frogobox
+#
+#  # Keystore Alias Password
+#  ks_alias_pass: xeonranger
+
 on:
   push:
     branches: [ "main" ] # [dev,test]
@@ -33,12 +53,14 @@ jobs:
 #          cache-dependency-path: | # optional
 #            sub-project/*.gradle*
 #            sub-project/**/gradle-wrapper.properties
+#      - name: Grant execute permission for gradlew
+#        run: chmod +x gradlew
 #      - name: Build with gradle
 #        run: ./gradlew build --no-daemon
       - name: Cache Gradle packages
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
-          token: ${{ secrets.ACCESS_TOKEN }}
+          token: ${{ env.token }}
           path: |
             cd example
             cd android

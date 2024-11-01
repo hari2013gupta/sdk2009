@@ -57,14 +57,6 @@ jobs:
 #        run: chmod +x gradlew
 #      - name: Build with gradle
 #        run: ./gradlew build --no-daemon
-      - name: Cache Gradle packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            cd example
-            cd android
-            ~/.gradle/caches
-            ~/.gradle/wrapper
 
       # Note: This workflow uses the latest stable version of the Dart SDK.
       # You can specify other versions if desired, see documentation here:

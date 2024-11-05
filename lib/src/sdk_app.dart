@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sdk2009/src/sdk_view.dart';
+import 'package:sdk2009/src/ui/sdk_view.dart';
 
 class SdkApp extends StatelessWidget {
   final String url;

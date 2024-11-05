@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sdk2009/sdk2009.dart';
-import 'package:sdk2009/src/sdk_view.dart';
+import 'package:sdk2009/src/ui/sdk_view.dart';
 import 'package:sdk2009/src/singleton/generic_event_bus.dart';
 import 'package:sdk2009/src/singleton/multi_event_bus.dart';
 

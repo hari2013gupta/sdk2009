@@ -25,6 +25,8 @@ import android.media.RingtoneManager
 import android.util.Base64
 import android.os.Build
 import android.util.Log
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.common.api.CommonStatusCodes
@@ -275,6 +277,13 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
                 result.success(jsonInfo.toString())
             }
 
+            "get_platform_views" -> {
+//                pluginBinding
+//                    .platformViewRegistry
+//                    .registerViewFactory("@views/native-view", NativeViewFactory())
+                result.success("ok")
+            }
+
             "android_sms_consent" -> {
                 val msg = call.argument<String>("code")
                 result.success(msg)
@@ -285,7 +294,6 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
             }
         }
     }
-
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
         appContext = null

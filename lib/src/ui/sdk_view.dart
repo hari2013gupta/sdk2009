@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sdk2009/sdk2009.dart';
 import 'package:sdk2009/src/singleton/generic_event_bus.dart';
+import 'package:sdk2009/src/utils/app_assets.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class SdkView extends StatefulWidget {
@@ -36,7 +37,7 @@ class _SdkViewState extends State<SdkView> {
     // debugPrint(indexHtml);
 
     wController.addJavaScriptChannel(
-      'Print',
+      'Flutter',
       onMessageReceived: (JavaScriptMessage jsMessage) {
         //This is where you receive message from
         //javascript code and handle in Flutter/Dart
@@ -100,7 +101,7 @@ class _SdkViewState extends State<SdkView> {
 </style>
 
 <div class="btn-group">
-    <button onclick="Print.postMessage('js_close')">Call flutter</button>
+    <button onclick="Flutter.postMessage('js_close')">Call flutter</button>
 
     <button onclick="console.error('This is an error message.')">Error</button>
     <p/>
@@ -202,6 +203,10 @@ The navigation delegate is set to block navigation to the youtube website.
   @override
   Widget build(BuildContext context) {
     // initiateWebViewController();
+    // Future.delayed(Duration.zero, () async {
+    //   final htmlValue = await loadIndexHtml();
+    //   log('htmlValue===============>$htmlValue');
+    // });
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {

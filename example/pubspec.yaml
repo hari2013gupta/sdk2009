@@ -4,6 +4,9 @@ description: "Demonstrates how to use the sdk2009 plugin."
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
+# following link is an example of ffi gen and jni gen
+# https://github.com/flutter/samples/blob/main/experimental/pedometer/pubspec.yaml
+
 version: 1.0.0+1
 
 environment:
@@ -43,6 +46,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+  build_runner: ^2.4.13
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

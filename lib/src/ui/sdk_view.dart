@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sdk2009/sdk2009.dart';
 import 'package:sdk2009/src/singleton/generic_event_bus.dart';
+import 'package:sdk2009/src/users.g.dart';
 import 'package:sdk2009/src/utils/app_assets.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -200,8 +201,28 @@ The navigation delegate is set to block navigation to the youtube website.
     wController.clearLocalStorage();
   }
 
+  final UserHostApi userApi = UserHostApi();
+  final MessageHostApi messageApi = MessageHostApi();
+
+  userOperation() async {
+    User user = User(name: 'name777', mobileNo: 9999999);
+    final b = await userApi.saveUser(user);
+    log('----b----->$b');
+    Message m = Message(content: 'content2222');
+    await messageApi.sendMessage(m);
+    log('----okk----->');
+
+    User k = await userApi.getUser();
+    log('----k----->$k');
+    List<User> kk = await userApi.getAllUser();
+    for (User u in kk) {
+      log('----list----->$u');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    userOperation();
     // initiateWebViewController();
     // Future.delayed(Duration.zero, () async {
     //   final htmlValue = await loadIndexHtml();

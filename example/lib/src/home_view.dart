@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sdk2009/sdk2009.dart';
 import 'package:sdk2009_example/src/ui/upi_view.dart';
+import 'package:sdk2009_example/src/ui/video_view.dart';
 import 'package:sdk2009_example/src/ui/webapp_view.dart';
 
 class HomeView extends StatefulWidget {
@@ -22,6 +23,14 @@ class _HomeViewState extends State<HomeView> {
     smsCTR = TextEditingController();
     getPlatformInfo();
     listenVerificationCodeFromNative();
+  }
+
+  late Size size;
+
+  @override
+  didChangeDependencies() {
+    super.didChangeDependencies();
+    // size =calculations(MediaQuery.of(context).size);
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -137,6 +146,11 @@ class _HomeViewState extends State<HomeView> {
             ElevatedButton(
               onPressed: () async {},
               child: const Text('===Phone-Pe==='),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const VideoView())),
+              child: const Text('===Video-Player==='),
             ),
             const Spacer(),
             const Divider(),

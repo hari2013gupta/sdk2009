@@ -68,6 +68,10 @@ class Sdk2009 {
     return Sdk2009Platform.instance.getBoomerang();
   }
 
+  Widget getWebView(String url) {
+    return SdkView(url: url);
+  }
+
   // Event names
   static const eventSuccess = 'response.success';
   static const eventError = 'response.error';

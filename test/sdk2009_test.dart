@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/src/services/platform_channel.dart';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sdk2009/plugin/sdk2009_platform_interface.dart';
 import 'package:sdk2009/plugin/sdk2009_method_channel.dart';
@@ -90,6 +91,12 @@ class MockSdk2009Platform
   @override
   Stream<String> streamAnyFromNative() {
     // TODO: implement streamAnyFromNative
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget getWebView() {
+    // TODO: implement getWebView
     throw UnimplementedError();
   }
 }

@@ -99,6 +99,18 @@ class MockSdk2009Platform
     // TODO: implement getWebView
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> nativeRegisterReceiver() {
+    // TODO: implement nativeRegisterReceiver
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> nativeUnregisterReceiver() {
+    // TODO: implement nativeUnregisterReceiver
+    throw UnimplementedError();
+  }
 }
 
 void main() {

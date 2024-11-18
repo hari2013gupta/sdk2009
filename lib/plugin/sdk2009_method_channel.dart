@@ -55,6 +55,16 @@ class MethodChannelSdk2009 extends Sdk2009Platform {
   }
 
   @override
+  Future<void> nativeRegisterReceiver() async {
+    return await methodChannel.invokeMethod<void>('native_receiver_register');
+  }
+
+  @override
+  Future<void> nativeUnregisterReceiver() async {
+    return await methodChannel.invokeMethod<void>('native_receiver_unregister');
+  }
+
+  @override
   Future<String?> getAvailableUpiApps() async {
     return await methodChannel.invokeMethod<String>('get_available_upi');
   }

@@ -29,6 +29,7 @@ class _SdkViewState extends State<SdkView> {
     getPlatformVersion();
 
     initiateWebViewController();
+    listenVerificationCodeFromNative();
   }
 
   void initiateWebViewController() async {
@@ -197,6 +198,8 @@ The navigation delegate is set to block navigation to the youtube website.
   @override
   void dispose() {
     super.dispose();
+    plugin.nativeUnregisterReceiver();
+
     wController.clearCache();
     wController.clearLocalStorage();
   }
@@ -283,6 +286,7 @@ The navigation delegate is set to block navigation to the youtube website.
 
   void listenVerificationCodeFromNative() {
     try {
+      plugin.nativeRegisterReceiver();
       plugin.getMethodChannel().setMethodCallHandler((call) async {
         // Get hear method and passed arguments with method
         debugPrint('Listener :: MethodInvoked: ${call.method}');

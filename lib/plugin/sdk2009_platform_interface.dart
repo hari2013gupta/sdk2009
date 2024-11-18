@@ -50,6 +50,14 @@ abstract class Sdk2009Platform extends PlatformInterface {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
+  Future<void> nativeRegisterReceiver() {
+  throw UnimplementedError('registerReceiver() has not been implemented.');
+  }
+
+  Future<void> nativeUnregisterReceiver() {
+  throw UnimplementedError('unregisterReceiver() has not been implemented.');
+  }
+
   Future<String?> getAvailableUpiApps() {
     throw UnimplementedError('availableUpiApps() has not been implemented.');
   }

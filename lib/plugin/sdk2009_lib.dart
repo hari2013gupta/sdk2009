@@ -35,6 +35,14 @@ class Sdk2009 {
     return Sdk2009Platform.instance.getPlatformInfo();
   }
 
+  Future<void> nativeRegisterReceiver() {
+    return Sdk2009Platform.instance.nativeRegisterReceiver();
+  }
+
+  Future<void> nativeUnregisterReceiver() {
+    return Sdk2009Platform.instance.nativeUnregisterReceiver();
+  }
+
   Future<String?> getAvailableUpiApps() {
     return Sdk2009Platform.instance.getAvailableUpiApps();
   }

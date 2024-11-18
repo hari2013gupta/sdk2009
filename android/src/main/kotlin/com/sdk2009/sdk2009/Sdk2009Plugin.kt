@@ -1,16 +1,5 @@
 package com.sdk2009.sdk2009
 
-import io.flutter.embedding.engine.plugins.FlutterPlugin
-import io.flutter.embedding.engine.plugins.activity.ActivityAware
-import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
-import io.flutter.plugin.common.EventChannel
-import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import io.flutter.plugin.common.PluginRegistry
-
-import java.util.*
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -22,22 +11,31 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.media.RingtoneManager
-import android.util.Base64
 import android.os.Build
+import android.util.Base64
 import android.util.Log
-import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import com.google.android.gms.auth.api.phone.SmsRetriever
-import com.google.android.gms.common.api.CommonStatusCodes
-import com.google.android.gms.common.api.Status
+import com.sdk2009.sdk2009.receiver.AnyEventHandler
 import com.sdk2009.sdk2009.receiver.SmsVerificationReceiver
+import com.sdk2009.sdk2009.util.AppSignatureHelper
 import com.sdk2009.sdk2009.util.Common
-import com.sdk2009.sdk2009.util.UpiIntentUtil
 import com.sdk2009.sdk2009.util.SmsConsentUtil
 import com.sdk2009.sdk2009.util.TimeHandler
-import com.sdk2009.sdk2009.receiver.AnyEventHandler
+import com.sdk2009.sdk2009.util.UpiIntentUtil
+import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+import io.flutter.plugin.common.EventChannel
+import io.flutter.plugin.common.MethodCall
+import io.flutter.plugin.common.MethodChannel
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler
+import io.flutter.plugin.common.MethodChannel.Result
+import io.flutter.plugin.common.PluginRegistry
 import org.json.JSONObject
+import java.util.*
+
+
 /** Sdk2009Plugin
  *
  * 1# GET PLATFORM VERSION
@@ -120,18 +118,8 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
 //        locationEventChannel = EventChannel( binding.binaryMessenger, "location_handler_event"); // timeHandlerEvent event name
 //        locationEventChannel.setStreamHandler(LocationHandler) // LocationHandler is event class
 
-        SmsConsentUtil.startSmsUserConsent(this.activityBinding)
+        // register receiver here
 
-        val intentFilter = IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            activity?.registerReceiver(
-                SmsVerificationReceiver(activityBinding),
-                intentFilter,
-                RECEIVER_EXPORTED
-            )
-        } else {
-            activity?.registerReceiver(SmsVerificationReceiver(activityBinding), intentFilter)
-        }
         // activity result listener from here
         activityBinding.addActivityResultListener(this)
     }
@@ -271,8 +259,12 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
                 val jsonInfo = JSONObject()
                 val batteryLevel = Common.getBatteryLevel(activityBinding)
                 val platformVersion = Build.VERSION.RELEASE
+
+                val signatureHelper = AppSignatureHelper(activity!!.applicationContext)
+                val appSignature = signatureHelper.appSignature
                 jsonInfo.put("battery_level", batteryLevel)
                 jsonInfo.put("platform_version", platformVersion)
+                jsonInfo.put("appSignature", appSignature)
 
                 result.success(jsonInfo.toString())
             }
@@ -287,6 +279,33 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
             "android_sms_consent" -> {
                 val msg = call.argument<String>("code")
                 result.success(msg)
+            }
+
+            "native_receiver_register" -> {
+
+                SmsConsentUtil.startSmsUserConsent(this.activityBinding)
+
+                val intentFilter = IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    activity?.registerReceiver(
+                        SmsVerificationReceiver(activityBinding),
+                        intentFilter,
+                        RECEIVER_EXPORTED
+                    )
+                } else {
+                    activity?.registerReceiver(SmsVerificationReceiver(activityBinding), intentFilter)
+                }
+                result.success("msg")
+            }
+
+            "native_receiver_unregister" -> {
+                activity!!.unregisterReceiver(SmsVerificationReceiver(activityBinding))
+                result.success("msg")
+            }
+
+            "native_generate_hashcode" -> {
+//                val hash =AppSignatureHelper
+                result.success("msg")
             }
 
             else -> {
@@ -400,7 +419,7 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     }
 
     override fun onDetachedFromActivity() {
-        activity!!.unregisterReceiver(SmsVerificationReceiver(activityBinding))
+        // unregister receiver
         activity = null
     }
 

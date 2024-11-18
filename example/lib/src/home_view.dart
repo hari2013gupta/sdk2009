@@ -106,69 +106,72 @@ class _HomeViewState extends State<HomeView> {
         title: const Text('Demo app'),
       ),
       body: Center(
-        child: Column(
-          children: [
-            Text(_platformInfo),
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const WebappView())),
-              child: const Text('WebView App'),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const UpiView())),
-              child: const Text('UPI View'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                final boomerang = await _sdk2009Plugin.getBoomerang();
-                debugPrint(boomerang);
-              },
-              child: const Text('===Razorpay==='),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                _sdk2009Plugin.showNativeAlert(
-                    'text_title', 'text_message', 'yes_no');
-              },
-              child: const Text('===Stripe==='),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                _sdk2009Plugin.playNativeSound();
-              },
-              child: const Text('===Pay-U==='),
-            ),
-            ElevatedButton(
-              onPressed: () async {},
-              child: const Text('===Google-Pay==='),
-            ),
-            ElevatedButton(
-              onPressed: () async {},
-              child: const Text('===Phone-Pe==='),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const VideoView())),
-              child: const Text('===Video-Player==='),
-            ),
-            const Spacer(),
-            const Divider(),
-            TextField(controller: smsCTR),
-            // StreamBuilder<String>(
-            //   stream: _sdk2009Plugin.getStreamTimerEvent(),
-            //   builder: (context, snapshot) {
-            //     if (snapshot.hasData) {
-            //       return Text(
-            //         '${snapshot.data}',
-            //         style: Theme.of(context).textTheme.displayLarge,
-            //       );
-            //     } else {
-            //       return const CircularProgressIndicator();
-            //     }
-            //   },
-            // ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+          child: Column(
+            children: [
+              Text(_platformInfo),
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const WebappView())),
+                child: const Text('WebView App'),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const UpiView())),
+                child: const Text('UPI View'),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  final boomerang = await _sdk2009Plugin.getBoomerang();
+                  debugPrint(boomerang);
+                },
+                child: const Text('===Razorpay==='),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  _sdk2009Plugin.showNativeAlert(
+                      'text_title', 'text_message', 'yes_no');
+                },
+                child: const Text('===Stripe==='),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  _sdk2009Plugin.playNativeSound();
+                },
+                child: const Text('===Pay-U==='),
+              ),
+              ElevatedButton(
+                onPressed: () async {},
+                child: const Text('===Google-Pay==='),
+              ),
+              ElevatedButton(
+                onPressed: () async {},
+                child: const Text('===Phone-Pe==='),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const VideoView())),
+                child: const Text('===Video-Player==='),
+              ),
+              const Spacer(),
+              const Divider(),
+              TextField(controller: smsCTR),
+              // StreamBuilder<String>(
+              //   stream: _sdk2009Plugin.getStreamTimerEvent(),
+              //   builder: (context, snapshot) {
+              //     if (snapshot.hasData) {
+              //       return Text(
+              //         '${snapshot.data}',
+              //         style: Theme.of(context).textTheme.displayLarge,
+              //       );
+              //     } else {
+              //       return const CircularProgressIndicator();
+              //     }
+              //   },
+              // ),
+            ],
+          ),
         ),
       ),
     );

@@ -11,11 +11,14 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.media.RingtoneManager
+import android.net.ConnectivityManager
 import android.os.Build
 import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.auth.api.phone.SmsRetriever
+import com.sdk2009.sdk2009.iconnect.Connectivity
+import com.sdk2009.sdk2009.iconnect.ConnectivityBroadcastReceiver
 import com.sdk2009.sdk2009.receiver.AnyEventHandler
 import com.sdk2009.sdk2009.receiver.SmsVerificationReceiver
 import com.sdk2009.sdk2009.util.AppSignatureHelper
@@ -30,7 +33,6 @@ import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry
 import org.json.JSONObject
 import java.util.*
@@ -60,7 +62,10 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     private lateinit var activityBinding: ActivityPluginBinding
     private lateinit var pluginBinding: FlutterPlugin.FlutterPluginBinding
     private var appContext: Context? = null
-    private lateinit var result: Result
+    private lateinit var result: MethodChannel.Result
+
+    private var iConnectReceiver: ConnectivityBroadcastReceiver? = null
+    private lateinit var iConnect: Connectivity
 
     companion object {
         const val TAG_APP = "sdk2009plugin"
@@ -83,6 +88,8 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         ) // timeHandlerEvent event name
         eventChannel.setStreamHandler(TimeHandler) // TimeHandler is an event class
         eventChannel.setStreamHandler(AnyEventHandler) // AnyEventHandler is an event class
+
+        setupChannels(this.appContext!!)
 
     }
 
@@ -124,7 +131,21 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         activityBinding.addActivityResultListener(this)
     }
 
-    override fun onMethodCall(call: MethodCall, callResult: Result) {
+    private fun setupChannels(context: Context) {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        this.iConnect = Connectivity(connectivityManager)
+
+//        val methodChannelHandler =
+//            ConnectivityMethodChannelHandler(connectivity)
+        iConnectReceiver = ConnectivityBroadcastReceiver(context, this.iConnect)
+
+//        channel.setMethodCallHandler(methodChannelHandler)
+        eventChannel.setStreamHandler(iConnectReceiver)
+    }
+
+    override fun onMethodCall(call: MethodCall, callResult: MethodChannel.Result) {
         result = callResult
         when (call.method) {
 
@@ -303,9 +324,13 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
                 result.success("msg")
             }
 
+            "network_type" -> {
+                result.success(iConnect.networkTypes.toString())
+            }
+
             "native_generate_hashcode" -> {
 //                val hash =AppSignatureHelper
-                result.success("msg")
+                result.success("hash")
             }
 
             else -> {

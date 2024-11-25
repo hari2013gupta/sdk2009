@@ -44,6 +44,10 @@ class MethodChannelSdk2009 extends Sdk2009Platform {
   }
 
   @override
+  Future<String?> iConnect() async {
+    return await methodChannel.invokeMethod<String>('network_type');
+  }
+  @override
   Future<String?> playNativeSound() async {
     return await methodChannel.invokeMethod<String>('native_sound');
   }

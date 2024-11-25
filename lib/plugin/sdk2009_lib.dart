@@ -31,6 +31,10 @@ class Sdk2009 {
     return Sdk2009Platform.instance.playNativeSound();
   }
 
+  Future<String?> iConnect() {
+    return Sdk2009Platform.instance.iConnect();
+  }
+
   Future<String?> getPlatformInfo() {
     return Sdk2009Platform.instance.getPlatformInfo();
   }

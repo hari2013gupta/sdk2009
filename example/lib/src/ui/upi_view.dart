@@ -77,24 +77,11 @@ class UpiView extends StatelessWidget {
                     (result) => debugPrint('------>>>>>>>upi-result>>$result')),
                 child: const Text('Open upi intent'),
               ),
-    ElevatedButton(
-    onPressed: () => launchUpiApp().then(
-    (result) => debugPrint('------>>>>>>>upi-result>>$result')),
-    child: const Text('Launch upi app'),
-    ),
-    ElevatedButton(
-    onPressed: () {
-      // Navigator.of(context).push(MaterialPageRoute(
-      //     builder: (context) => const DownloadWidget(
-      //         title: 'Download resume page')));
-
-      // Navigator.of(context).push(MaterialPageRoute(
-      //     builder: (context) => const WebviewWidget()));
-
-    },
-    child: const Text('Download file'),
-    ),
-
+              ElevatedButton(
+                onPressed: () => launchUpiApp().then(
+                    (result) => debugPrint('------>>>>>>>upi-result>>$result')),
+                child: const Text('Launch upi app'),
+              ),
             ],
           ),
         ));

@@ -46,6 +46,10 @@ abstract class Sdk2009Platform extends PlatformInterface {
     throw UnimplementedError('nativeSound() has not been implemented.');
   }
 
+  Future<String?> iConnect() {
+    throw UnimplementedError('iConnect() has not been implemented.');
+  }
+
   Future<String?> getPlatformInfo() {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }

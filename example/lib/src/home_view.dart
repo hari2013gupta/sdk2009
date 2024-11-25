@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sdk2009/sdk2009.dart';
+import 'package:sdk2009_example/src/ui/razorpay_view.dart';
 import 'package:sdk2009_example/src/ui/upi_view.dart';
 import 'package:sdk2009_example/src/ui/video_view.dart';
 import 'package:sdk2009_example/src/ui/webapp_view.dart';
@@ -112,8 +115,8 @@ class _HomeViewState extends State<HomeView> {
             children: [
               Text(_platformInfo),
               ElevatedButton(
-                onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const WebappView())),
+                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const WebappView())),
                 child: const Text('WebView App'),
               ),
               ElevatedButton(
@@ -122,10 +125,12 @@ class _HomeViewState extends State<HomeView> {
                 child: const Text('UPI View'),
               ),
               ElevatedButton(
-                onPressed: () async {
-                  final boomerang = await _sdk2009Plugin.getBoomerang();
-                  debugPrint(boomerang);
-                },
+                onPressed: () async => Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const RazorpayView())),
+                // final boomerang = await _sdk2009Plugin.getBoomerang();
+                // debugPrint(boomerang);
+                // },
                 child: const Text('===Razorpay==='),
               ),
               ElevatedButton(
@@ -137,7 +142,9 @@ class _HomeViewState extends State<HomeView> {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  _sdk2009Plugin.playNativeSound();
+                  final result = await _sdk2009Plugin.iConnect();
+                  log('result============>$result');
+                  // _sdk2009Plugin.playNativeSound();
                 },
                 child: const Text('===Pay-U==='),
               ),

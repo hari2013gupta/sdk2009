@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -12,6 +13,11 @@ class UpiView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sdk2009plugin = Sdk2009();
+
+    // List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
+    // final Connectivity _connectivity = Connectivity();
+    // late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
+
     List<UpiObject> upiAppsListAndroid = [];
     // Platform messages are asynchronous, so we initialize in an async method.
     Future<UpiMeta> getAvailableUpiApps() async {
@@ -82,6 +88,20 @@ class UpiView extends StatelessWidget {
                     (result) => debugPrint('------>>>>>>>upi-result>>$result')),
                 child: const Text('Launch upi app'),
               ),
+
+              const Spacer(),
+              // ListView(
+              //   shrinkWrap: true,
+              //   children: List.generate(
+              //       _connectionStatus.length,
+              //           (index) => Center(
+              //         child: Text(
+              //           _connectionStatus[index].toString(),
+              //           style: Theme.of(context).textTheme.headlineSmall,
+              //         ),
+              //       )),
+              // ),
+              const Spacer(flex: 2),
             ],
           ),
         ));

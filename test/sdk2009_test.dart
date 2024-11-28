@@ -111,6 +111,12 @@ class MockSdk2009Platform
     // TODO: implement nativeUnregisterReceiver
     throw UnimplementedError();
   }
+
+  @override
+  Future<String?> iConnect() {
+    // TODO: implement iConnect
+    throw UnimplementedError();
+  }
 }
 
 void main() {

@@ -1,3 +1,6 @@
+git push origin -d branch-name
+git branch --delete <branch-name>
+//----------------------------------------------
 Create an upload keystore
 #
 On macOS or Linux, use the following command:

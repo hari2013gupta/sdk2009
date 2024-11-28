@@ -2,10 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:path/path.dart';
 import 'package:sdk2009/sdk2009.dart';
 import 'package:sdk2009/src/ui/sdk_view.dart';
 import 'package:sdk2009/src/singleton/generic_event_bus.dart';
 import 'package:sdk2009/src/singleton/multi_event_bus.dart';
+import 'package:sdk2009/src/ui/sdk_webview.dart';
 
 import 'sdk2009_platform_interface.dart';
 
@@ -111,19 +114,41 @@ class Sdk2009 {
     _callbackFunction = callbackFunction;
   }
 
+  static bool _isInitialized = false;
+
   void init({
     required BuildContext context,
     required String paymentUrl,
     required PluginCallback pluginCallback,
     required CallbackFunction callbackFunction,
+    required bool hasPlatformWebView,
   }) async {
+    initializeDotenv();
+
     activate(
         pluginCallback: pluginCallback, callbackFunction: callbackFunction);
-    waitingForWebviewResponse(context, paymentUrl);
+    if (hasPlatformWebView) {
+      openNativePlatformWebView(context, paymentUrl);
+    } else {
+      waitingForWebviewResponse(context, paymentUrl);
+    }
+  }
+
+  static Future<void> initializeDotenv() async {
+    if (!_isInitialized) {
+      await dotenv.load(fileName: ".env");
+      _isInitialized = true;
+    }
   }
 
   PluginCallback? _callback;
   CallbackFunction? _callbackFunction;
+
+  void openNativePlatformWebView(context, paymentUrl) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => SdkWebView(url: paymentUrl),
+    ));
+  }
 
   Future<void> waitingForWebviewResponse(context, paymentUrl) async {
     await Navigator.of(context)

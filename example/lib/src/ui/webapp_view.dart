@@ -27,16 +27,33 @@ class WebappView extends StatelessWidget implements PluginCallback {
     // plugin.setCallback(this);
     return Scaffold(
       body: Center(
-        child: ElevatedButton(
-          onPressed: () async {
-            plugin.init(
-              context: context,
-              paymentUrl: sbiCardUrl,
-              callbackFunction: cf,
-              pluginCallback: this,
-            );
-          },
-          child: const Text('Pay Now'),
+        child: Row(
+          children: [
+            ElevatedButton(
+              onPressed: () async {
+                plugin.init(
+                  context: context,
+                  paymentUrl: sbiCardUrl,
+                  callbackFunction: cf,
+                  pluginCallback: this,
+                  hasPlatformWebView: false,
+                );
+              },
+              child: const Text('Pay Now'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                plugin.init(
+                  context: context,
+                  paymentUrl: sbiCardUrl,
+                  callbackFunction: cf,
+                  pluginCallback: this,
+                  hasPlatformWebView: true,
+                );
+              },
+              child: const Text('Platform View'),
+            ),
+          ],
         ),
       ),
     );

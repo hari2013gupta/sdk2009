@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sdk2009/sdk2009.dart';
 import 'package:sdk2009/src/singleton/generic_event_bus.dart';
 import 'package:sdk2009/src/users.g.dart';
@@ -37,6 +38,9 @@ class _SdkViewState extends State<SdkView> {
     // debugPrint('===============>indexHtml<===========');
     // final indexHtml = await loadIndexHtml();
     // debugPrint(indexHtml);
+
+    final dotenvValue = dotenv.env["API_KEY"];
+    log('dotenvValue----->$dotenvValue');
 
     wController.addJavaScriptChannel(
       'Flutter',
@@ -145,21 +149,21 @@ The navigation delegate is set to block navigation to the youtube website.
 </body>
 </html>
 ''';
-    // String finalUrl =
-    //     'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf';
+    String finalUrl =
+        'https://flutter.dev';
     wController
       // ..loadFile(myAssetFile.path)
       // ..loadFile(indexHtml)
-      ..loadHtmlString(kLogExamplePage)
+      // ..loadHtmlString(kLogExamplePage)
       // ..loadFlutterAsset('assets/web/index.html')
-      // ..loadRequest(
-      //   Uri.parse(finalUrl),
-      //   headers: {
-      //     "referer": "https://transaction.jsp",
-      //     "origin": "https://",
-      //     // "referer": "https:transaction.jsp"
-      //   },
-      // )
+      ..loadRequest(
+        Uri.parse(finalUrl),
+        headers: {
+          "referer": "https://transaction.jsp",
+          "origin": "https://",
+          // "referer": "https:transaction.jsp"
+        },
+      )
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
       ..setNavigationDelegate(

@@ -2,4 +2,9 @@
   package="com.sdk2009.sdk2009">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <application >
+        <meta-data
+            android:name="io.flutter.embedding.android.AndroidViewIntegrationStyle"
+            android:value="hybrid" />
+    </application>
 </manifest>

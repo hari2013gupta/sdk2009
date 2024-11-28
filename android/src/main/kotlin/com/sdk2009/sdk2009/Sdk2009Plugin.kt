@@ -26,6 +26,7 @@ import com.sdk2009.sdk2009.util.Common
 import com.sdk2009.sdk2009.util.SmsConsentUtil
 import com.sdk2009.sdk2009.util.TimeHandler
 import com.sdk2009.sdk2009.util.UpiIntentUtil
+import com.sdk2009.sdk2009.util.WebViewFactory
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -79,7 +80,8 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     override fun onAttachedToEngine(flutterBinding: FlutterPlugin.FlutterPluginBinding) {
         this.pluginBinding = flutterBinding
         this.appContext = flutterBinding.applicationContext
-        channel = MethodChannel(flutterBinding.binaryMessenger, CHANNEL_NAME)
+        val messenger = flutterBinding.binaryMessenger
+        channel = MethodChannel(messenger, CHANNEL_NAME)
         channel.setMethodCallHandler(this)
 
         // Time Listener Event Channel
@@ -90,6 +92,9 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         eventChannel.setStreamHandler(AnyEventHandler) // AnyEventHandler is an event class
 
         setupChannels(this.appContext!!)
+
+        flutterBinding.platformViewRegistry.registerViewFactory(
+            "sdk2009/webview", WebViewFactory(messenger))
 
     }
 
@@ -314,7 +319,10 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
                         RECEIVER_EXPORTED
                     )
                 } else {
-                    activity?.registerReceiver(SmsVerificationReceiver(activityBinding), intentFilter)
+                    activity?.registerReceiver(
+                        SmsVerificationReceiver(activityBinding),
+                        intentFilter
+                    )
                 }
                 result.success("msg")
             }
@@ -338,8 +346,16 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
             }
         }
     }
+
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
+
+//        channel.setStreamHandler(null);
+        iConnectReceiver?.onCancel(null);
+//        channel = null;
+//        eventChannel = null;
+        iConnectReceiver = null;
+
         appContext = null
     }
 

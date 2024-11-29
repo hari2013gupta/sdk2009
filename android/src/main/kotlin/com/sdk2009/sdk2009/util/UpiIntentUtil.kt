@@ -1,8 +1,10 @@
 package com.sdk2009.sdk2009.util
 
 import android.annotation.TargetApi
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Build
@@ -21,26 +23,56 @@ class UpiIntentUtil {
 
     companion object {
         fun openUpiIntent(
-            url: String, activityBinding: ActivityPluginBinding, result: MethodChannel.Result
+            url: String?, activityBinding: ActivityPluginBinding, result: MethodChannel.Result
         ) {
+            Log.i("upi-app","------>url=$url")
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            if (intent.resolveActivity(activityBinding.activity.packageManager) != null) {
+            val resolveIntent = intent.resolveActivity(activityBinding.activity.packageManager)
+            val isUpiAppInstalled = isUpiAppInstalled(activityBinding.activity, url!!)
+            Log.i("upi-app","------>resolveIntent=$resolveIntent, .isUpiAppInstalled=$isUpiAppInstalled")
+            if (resolveIntent != null) {
                 activityBinding.activity.startActivityForResult(intent, REQ_UPI_INTENT)
             } else {
-//            Toast.makeText(activity.activity, "Please make sure you've installed UPI apps", Toast.LENGTH_LONG).show()
                 result.success("Please make sure you've installed UPI apps")
             }
         }
 
+        private fun isUpiAppInstalled(activity: Activity, upiUrl: String): Boolean {
+            val packageManager: PackageManager = activity.packageManager ?: return false
+            val upiAppIntent = Intent(Intent.ACTION_VIEW, Uri.parse(upiUrl))
+            val availableApps = packageManager.queryIntentActivities(upiAppIntent, PackageManager.MATCH_DEFAULT_ONLY)
+
+            return availableApps.isNotEmpty()
+        }
+
         @TargetApi(Build.VERSION_CODES.DONUT)
-        fun openUpiApp(activityBinding: ActivityPluginBinding, data: String, packageName: String) {
+        fun openUpiApp(activityBinding: ActivityPluginBinding, data: String?, packageName: String?, result: MethodChannel.Result) {
+            Log.i("upi-app","------>data=$data")
+            Log.i("upi-app","------>packageName=$packageName")
+
             val intent = Intent()
             intent.action = Intent.ACTION_VIEW
             intent.setPackage(packageName)
             intent.data = Uri.parse(data)
-            activityBinding.activity.startActivityForResult(intent, REQ_UPI_INTENT)
+            val resolveIntent = intent.resolveActivity(activityBinding.activity.packageManager)
+            val isAppInstalled = isSpecificUpiAppInstalled(activityBinding.activity, packageName!!)
+            Log.i("upi-app","------>resolveIntent=$resolveIntent, isAppInstalled->>>$isAppInstalled")
+            if (resolveIntent != null) {
+                activityBinding.activity.startActivityForResult(intent, REQ_UPI_INTENT)
+            } else {
+                result.success("Please make sure you've installed UPI apps")
+            }
         }
 
+        private fun isSpecificUpiAppInstalled(activity: Activity, packageName: String): Boolean {
+            val packageManager: PackageManager = activity.packageManager ?: return false
+            return try {
+                packageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES)
+                true
+            } catch (e: PackageManager.NameNotFoundException) {
+                false
+            }
+        }
         fun getUpiAppList(context: Context): String {
 
             val uriBuilder: Uri.Builder = Uri.Builder();

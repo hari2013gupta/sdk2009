@@ -54,7 +54,7 @@ class UpiView extends StatelessWidget {
       String? result;
       try {
         result = await sdk2009plugin.launchUpiIntent(
-            url: defaultUpiLink, package: amazonPackage);
+            url: defaultUpiLink, package: googlePackage);
         log(result.toString());
       } catch (e) {
         String error = "OPEN UPI APPS EXCEPTION : $e";

@@ -12,6 +12,12 @@ public class Sdk2009Plugin: NSObject, FlutterPlugin {
     switch call.method {
     case "getPlatformVersion":
       result("iOS " + UIDevice.current.systemVersion)
+    case "get_available_upi":
+      result("iOS " + UIDevice.current.systemVersion)
+    case "native_intent":
+      result("iOS " + UIDevice.current.systemVersion)
+    case "launch_upi_app":
+      result("iOS " + UIDevice.current.systemVersion)
     default:
       result(FlutterMethodNotImplemented)
     }

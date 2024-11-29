@@ -272,13 +272,13 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
 
             "native_intent" -> {
                 val url = call.argument<String>("url")
-                UpiIntentUtil.openUpiIntent(url!!, this.activityBinding, result)
+                UpiIntentUtil.openUpiIntent(url, this.activityBinding, result)
             }
 
             "launch_upi_app" -> {
                 val url = call.argument<String>("url")
                 val packageName = call.argument<String>("package")
-                UpiIntentUtil.openUpiApp(activityBinding, url!!, packageName!!)
+                UpiIntentUtil.openUpiApp(activityBinding, url, packageName, result)
             }
 
             "get_platform_info" -> {

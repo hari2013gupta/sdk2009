@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
-const defaultUpiLink = 'upi://pay?pa=112233220@ibl?pn=Harry&cu=INR';
+const defaultUpiLink = 'upi://pay?pa=112233220@ibl&am=10&pn=harry&tn=testing&cu=INR';
 // test package names
 const defaultUpiPackage = 'com.whatsapp'; // to handle error
 const amazonPackage = 'in.amazon.mShop.android.shopping';
+const payTmPackage = 'net.one97.paytm';
+const phonePePackage = 'com.phonepe.app';
+const googlePackage = 'com.google.android.apps.nbu.paisa.user';
 // test urls
 const googleUrl = 'https://google.com/';
 const pmCaresUrl = 'https://pmcares.org.in';

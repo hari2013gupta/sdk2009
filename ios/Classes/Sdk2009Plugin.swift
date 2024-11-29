@@ -22,4 +22,28 @@ public class Sdk2009Plugin: NSObject, FlutterPlugin {
       result(FlutterMethodNotImplemented)
     }
   }
+
+//  let uri = (arguments!["uri"] as? String)!
+//  result(self.canLaunch(uri: uri))
+//  self.launchUri(uri: uri, result: result)
+//  self.launchUri(uri: uri, result: result)
+
+  private func canLaunch(uri: String) -> Bool {
+    let url = URL(string: uri)
+    return UIApplication.shared.canOpenURL(url!)
+  }
+
+  private func launchUri(uri: String, result: @escaping FlutterResult) -> Bool {
+    if(canLaunch(uri: uri)) {
+      let url = URL(string: uri)
+      if #available(iOS 10, *) {
+        UIApplication.shared.open(url!, completionHandler: { (ret) in
+            result(ret)
+        })
+      } else {
+        result(UIApplication.shared.openURL(url!))
+      }
+    }
+    return false
+  }
 }

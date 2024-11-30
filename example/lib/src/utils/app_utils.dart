@@ -9,7 +9,6 @@ const phonePePackage = 'com.phonepe.app';
 const googlePackage = 'com.google.android.apps.nbu.paisa.user';
 // test urls
 const googleUrl = 'https://google.com/';
-const pmCaresUrl = 'https://pmcares.org.in';
 const sbiCardUrl = 'https://sbicard.com/';
 
 void showInternetDialog({

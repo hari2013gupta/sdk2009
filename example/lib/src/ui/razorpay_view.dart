@@ -17,8 +17,8 @@ class _RazorpayViewState extends State<RazorpayView> {
       child: TextButton(
           onPressed: () {
             // create an instance of razorPayIntegration
-            final RazorPayIntegration integration = RazorPayIntegration();
-            integration.openSession(amount: 10);
+            // final RazorPayIntegration integration = RazorPayIntegration();
+            // integration.openSession(amount: 10);
           },
           child: const Text('Razor Pay', style: TextStyle(fontSize: 18))),
     ));

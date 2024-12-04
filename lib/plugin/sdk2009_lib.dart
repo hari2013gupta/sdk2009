@@ -3,12 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:path/path.dart';
 import 'package:sdk2009/sdk2009.dart';
+import 'package:sdk2009/src/ui/native_webview.dart';
 import 'package:sdk2009/src/ui/sdk_view.dart';
 import 'package:sdk2009/src/singleton/generic_event_bus.dart';
 import 'package:sdk2009/src/singleton/multi_event_bus.dart';
-import 'package:sdk2009/src/ui/sdk_webview.dart';
 
 import 'sdk2009_platform_interface.dart';
 
@@ -146,7 +145,7 @@ class Sdk2009 {
 
   void openNativePlatformWebView(context, paymentUrl) {
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => SdkWebView(url: paymentUrl),
+      builder: (context) => NativeWebView(url: paymentUrl),
     ));
   }
 

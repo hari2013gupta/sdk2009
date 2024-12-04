@@ -2,6 +2,7 @@ package com.sdk2009.sdk2009
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.DownloadManager
 import android.content.Context
 import android.content.Context.RECEIVER_EXPORTED
 import android.content.Intent
@@ -12,7 +13,9 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.media.RingtoneManager
 import android.net.ConnectivityManager
+import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.util.Base64
 import android.util.Log
 import android.widget.Toast
@@ -339,6 +342,22 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
             "native_generate_hashcode" -> {
 //                val hash =AppSignatureHelper
                 result.success("hash")
+            }
+            "native_download" -> {
+                val url = call.argument<String>("url")!!
+                val fileName = call.argument<String>("fileName")!!
+
+                val request = DownloadManager.Request(Uri.parse(url))
+                request.setTitle(fileName)
+                request.setDescription("Downloading...")
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
+                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+
+                val downloadManager = activity?.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+                // enqueue puts the download request in the queue.
+                val downloadId = downloadManager.enqueue(request)
+
+//                result.success(downloadId)
             }
 
             else -> {

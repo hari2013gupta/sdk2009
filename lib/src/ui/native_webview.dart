@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class SdkWebView extends StatelessWidget {
-  const SdkWebView({super.key, required this.url});
+class NativeWebView extends StatelessWidget {
+  const NativeWebView({super.key, required this.url});
 
   final String url;
 

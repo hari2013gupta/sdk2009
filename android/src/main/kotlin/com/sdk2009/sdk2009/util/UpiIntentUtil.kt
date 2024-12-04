@@ -11,7 +11,6 @@ import android.os.Build
 import android.util.Log
 import com.sdk2009.sdk2009.Sdk2009Plugin.Companion.REQ_UPI_INTENT
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
-import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.MethodChannel
 import org.json.JSONArray
 import org.json.JSONObject
@@ -139,7 +138,7 @@ class UpiIntentUtil {
 
         /* upi operation send result
         * */
-        internal fun upiPaymentDataOperation(result: Result, data: ArrayList<String?>) {
+        internal fun upiPaymentDataOperation(result: MethodChannel.Result, data: ArrayList<String?>) {
             try {
                 var str = data[0]
                 var paymentCancel = ""

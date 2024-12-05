@@ -12,6 +12,14 @@ import 'package:sdk2009/src/singleton/multi_event_bus.dart';
 import 'sdk2009_platform_interface.dart';
 
 class Sdk2009 {
+  static final Sdk2009 _instance = Sdk2009._internal();
+
+  // Private constructor
+  Sdk2009._internal();
+
+  // Factory to expose a single instance
+  factory Sdk2009() => _instance;
+
   MethodChannel getMethodChannel() {
     return Sdk2009Platform.instance.getMethodChannel();
   }

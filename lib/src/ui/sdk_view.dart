@@ -7,6 +7,7 @@ import 'package:sdk2009/sdk2009.dart';
 import 'package:sdk2009/src/singleton/generic_event_bus.dart';
 import 'package:sdk2009/src/users.g.dart';
 import 'package:sdk2009/src/utils/app_assets.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class SdkView extends StatefulWidget {
@@ -149,8 +150,7 @@ The navigation delegate is set to block navigation to the youtube website.
 </body>
 </html>
 ''';
-    String finalUrl =
-        'https://flutter.dev';
+    String finalUrl = 'https://flutter.dev';
     wController
       // ..loadFile(myAssetFile.path)
       // ..loadFile(indexHtml)
@@ -186,6 +186,11 @@ The navigation delegate is set to block navigation to the youtube website.
             debugPrint('NavigationRequest :: ${request.url}');
             if (request.url.startsWith('https://www.youtube.com/')) {
               debugPrint('Preventing Navigation :: ${request.url}');
+              return NavigationDecision.prevent;
+            }
+            if (request.url.contains('upi://') ||
+                request.url.contains('upi:/')) {
+              launchUrl(Uri.parse(request.url));
               return NavigationDecision.prevent;
             }
             return NavigationDecision.navigate;

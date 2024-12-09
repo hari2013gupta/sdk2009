@@ -11,6 +11,12 @@ import 'package:sdk2009/src/singleton/multi_event_bus.dart';
 
 import 'sdk2009_platform_interface.dart';
 
+class Sdk2009Internal {
+  showNativeToast(String msg){
+    Sdk2009()._showNativeToast(msg);
+  }
+}
+
 class Sdk2009 {
   static final Sdk2009 _instance = Sdk2009._internal();
 
@@ -24,7 +30,7 @@ class Sdk2009 {
     return Sdk2009Platform.instance.getMethodChannel();
   }
 
-  Future<String?> showNativeToast(String msg) {
+  Future<String?> _showNativeToast(String msg) {
     return Sdk2009Platform.instance.showNativeToast(msg);
   }
 

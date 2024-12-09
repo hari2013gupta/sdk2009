@@ -5,6 +5,7 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'sdk2009_method_channel.dart';
 
 abstract class Sdk2009Platform extends PlatformInterface {
+  // Ensure this class can't be instantiated externally
   /// Constructs a Sdk2009Platform.
   Sdk2009Platform() : super(token: _token);
 

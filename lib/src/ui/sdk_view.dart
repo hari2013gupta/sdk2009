@@ -1,8 +1,10 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:sdk2009/plugin/sdk2009_lib.dart';
 import 'package:sdk2009/sdk2009.dart';
 import 'package:sdk2009/src/singleton/generic_event_bus.dart';
 import 'package:sdk2009/src/users.g.dart';
@@ -52,7 +54,7 @@ class _SdkViewState extends State<SdkView> {
         //in Run/LogCat window of android studio
         //handle close button, success and failed response accordingly
         debugPrint('---------addJavaScriptChannel------>${jsMessage.message}');
-        plugin.showNativeToast(jsMessage.message.toString());
+        showToast(msg: jsMessage.message.toString());
         switch (jsMessage.message) {
           case 'cancel':
             break;
@@ -77,7 +79,7 @@ class _SdkViewState extends State<SdkView> {
       debugPrint(
           '== JS Console == ${consoleMessage.level.name}: ${consoleMessage.message}');
     });
-    // File myAssetFile = File("assets/web/index.html");
+    File myAssetFile = File("assets/web/index.html");
     const String kLogExamplePage = '''
 <!DOCTYPE html>
 <html lang="en">
@@ -154,16 +156,16 @@ The navigation delegate is set to block navigation to the youtube website.
     wController
       // ..loadFile(myAssetFile.path)
       // ..loadFile(indexHtml)
-      // ..loadHtmlString(kLogExamplePage)
+      ..loadHtmlString(kLogExamplePage)
       // ..loadFlutterAsset('assets/web/index.html')
-      ..loadRequest(
-        Uri.parse(finalUrl),
-        headers: {
-          "referer": "https://transaction.jsp",
-          "origin": "https://",
-          // "referer": "https:transaction.jsp"
-        },
-      )
+      // ..loadRequest(
+      //   Uri.parse(finalUrl),
+      //   headers: {
+      //     "referer": "https://transaction.jsp",
+      //     "origin": "https://",
+      //     // "referer": "https:transaction.jsp"
+      //   },
+      // )
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
       ..setNavigationDelegate(
@@ -313,6 +315,6 @@ The navigation delegate is set to block navigation to the youtube website.
   }
 
   void showToast({required String msg}) {
-    plugin.showNativeToast(msg);
+    Sdk2009Internal().showNativeToast(msg);
   }
 }

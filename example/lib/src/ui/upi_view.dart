@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:sdk2009/plugin/sdk2009_lib.dart';
 import 'package:sdk2009/sdk2009.dart';
 import 'package:sdk2009_example/src/models/upi_meta.dart';
 import 'package:sdk2009_example/src/utils/app_utils.dart';
@@ -47,6 +48,7 @@ class UpiView extends StatelessWidget {
         String error = "OPEN UPI APPS EXCEPTION : $e";
         log(error, time: DateTime.now());
       }
+      // Sdk2009Internal().showNativeToast('msg');
       return response;
     }
 

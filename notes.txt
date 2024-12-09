@@ -1,6 +1,7 @@
 git push origin -d branch-name
 git branch --delete <branch-name>
 //----------------------------------------------
+export PATH=~/Documents/src/flutter/bin:$PATH
 Create an upload keystore
 #
 On macOS or Linux, use the following command:

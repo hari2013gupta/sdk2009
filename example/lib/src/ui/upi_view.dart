@@ -8,8 +8,15 @@ import 'package:sdk2009/sdk2009.dart';
 import 'package:sdk2009_example/src/models/upi_meta.dart';
 import 'package:sdk2009_example/src/utils/app_utils.dart';
 
-class UpiView extends StatelessWidget {
+class UpiView extends StatefulWidget {
   const UpiView({super.key});
+
+  @override
+  State<UpiView> createState() => _UpiViewState();
+}
+
+class _UpiViewState extends State<UpiView> {
+  List<UpiObject> upiAppsListAndroid = [];
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +26,13 @@ class UpiView extends StatelessWidget {
     // final Connectivity _connectivity = Connectivity();
     // late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
 
-    List<UpiObject> upiAppsListAndroid = [];
     // Platform messages are asynchronous, so we initialize in an async method.
     Future<UpiMeta> getAvailableUpiApps() async {
       try {
         final result = await sdk2009plugin.getAvailableUpiApps();
-        log(result.toString());
 
         if (result != null) {
+          log('len=====>  ${result.length}');
           final decode = jsonDecode(result);
 
           return UpiMeta.fromJson(decode);
@@ -66,47 +72,83 @@ class UpiView extends StatelessWidget {
     }
 
     return Scaffold(
-        appBar: AppBar(title: const Text('UPI view')),
-        body: Center(
-          child: Column(
+      backgroundColor: Colors.blueGrey,
+      appBar: AppBar(title: const Text('UPI view')),
+      body: Column(
+        children: [
+          const SizedBox(height: 10),
+          Row(
             children: [
-              ElevatedButton(
-                onPressed: () =>
-                    // sdk2009plugin.getAvailableUpiApps().then((result) {
-                    getAvailableUpiApps().then((result) {
-                  upiAppsListAndroid = result.data;
-                  debugPrint(
-                      '------->>>>>>>app-result>>${upiAppsListAndroid.length}');
-                }),
-                child: const Text('Get installed upi apps'),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () =>
+                      // sdk2009plugin.getAvailableUpiApps().then((result) {
+                      getAvailableUpiApps().then((result) {
+                    setState(() {
+                      upiAppsListAndroid = result.data;
+                    });
+                    for (UpiObject m in upiAppsListAndroid) {
+                      log('-----> ${m.name}');
+                    }
+                  }).catchError((e) {
+                    log('upi_err-----${e.toString()}');
+                  }),
+                  child: const Text('Get installed upi apps'),
+                ),
               ),
-              ElevatedButton(
-                onPressed: () => openUpiIntent().then(
-                    (result) => debugPrint('------>>>>>>>upi-result>>$result')),
-                child: const Text('Open upi intent'),
+              const SizedBox(width: 10),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () => openUpiIntent().then((result) =>
+                      debugPrint('------>>>>>>>upi-result>>$result')),
+                  child: const Text('Open upi intent'),
+                ),
               ),
-              ElevatedButton(
-                onPressed: () => launchUpiApp().then(
-                    (result) => debugPrint('------>>>>>>>upi-result>>$result')),
-                child: const Text('Launch upi app'),
+              const SizedBox(width: 10),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () => launchUpiApp().then((result) =>
+                      debugPrint('------>>>>>>>upi-result>>$result')),
+                  child: const Text('Launch upi app'),
+                ),
               ),
-
-              const Spacer(),
-              // ListView(
-              //   shrinkWrap: true,
-              //   children: List.generate(
-              //       _connectionStatus.length,
-              //           (index) => Center(
-              //         child: Text(
-              //           _connectionStatus[index].toString(),
-              //           style: Theme.of(context).textTheme.headlineSmall,
-              //         ),
-              //       )),
-              // ),
-              const Spacer(flex: 2),
             ],
           ),
-        ));
+          const Divider(),
+          ListView(
+            shrinkWrap: true,
+            children: List.generate(upiAppsListAndroid.length, (index) {
+              final item = upiAppsListAndroid[index];
+              log('icon--------->  ${item.icon}');
+              return ListTile(
+                  onTap: () {},
+                  contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                  horizontalTitleGap: 16,
+                  leading: Image.memory(base64Decode(item.icon)),
+                  title: Text(
+                    item.name,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineSmall!
+                        .copyWith(color: Colors.white),
+                  ));
+            }),
+          ),
+
+          // ListView(
+          //   shrinkWrap: true,
+          //   children: List.generate(
+          //       _connectionStatus.length,
+          //       (index) => Center(
+          //             child: Text(
+          //               _connectionStatus[index].toString(),
+          //               style: Theme.of(context).textTheme.headlineSmall,
+          //             ),
+          //           )),
+          // ),
+        ],
+      ),
+    );
   }
 }
 // _sdk2009Plugin.init(context);

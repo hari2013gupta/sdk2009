@@ -114,7 +114,7 @@ class UpiIntentUtil {
             val data = JSONObject()
             data.put("data", application)
 
-            print(application)
+//            print(application)
 
             return data.toString()
         }

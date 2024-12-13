@@ -39,20 +39,19 @@ public class Sdk2009Plugin: NSObject, FlutterPlugin {
         } else {
             result(FlutterError(code: "INVALID_URL", message: "Unable to open UPI URL", details: nil))
         }
-    case "download_file":
-        val url = call.argument<String>("url")!!
-        val fileName = call.argument<String>("fileName")!!
-
-        val request = DownloadManager.Request(Uri.parse(url))
-        request.setTitle(fileName)
-        request.setDescription("Downloading...")
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
-
-        val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        val downloadId = downloadManager.enqueue(request)
-
-        result.success(downloadId)
-
+    case "native_download":
+        let urlString = call.arguments as! String
+        let url = URL(string: urlString)!
+        let task = URLSession.shared.downloadTask(with: url) { localURL, response, error in
+            if let error = error {
+                result(FlutterError(code: "DOWNLOAD_FAILED", message: error.localizedDescription, details: nil))
+            } else if let localURL = localURL {
+                result(localURL.path)
+            } else {
+                result(FlutterError(code: "UNKNOWN_ERROR", message: "Download failed", details: nil))
+            }
+        }
+        task.resume()
     default:
       result(FlutterMethodNotImplemented)
     }

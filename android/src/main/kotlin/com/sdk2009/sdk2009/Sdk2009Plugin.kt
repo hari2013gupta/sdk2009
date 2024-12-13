@@ -97,8 +97,12 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         setupChannels(this.appContext!!)
 
         flutterBinding.platformViewRegistry.registerViewFactory(
-            "sdk2009/webview", WebViewFactory(messenger))
+            "sdk2009/webview", WebViewFactory(messenger)
+        )
 
+        flutterBinding.platformViewRegistry.registerViewFactory(
+            "sdk2009/customwebview", WebViewFactory(messenger)
+        )
     }
 
     /// following lines under observation----------------
@@ -343,6 +347,7 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
 //                val hash =AppSignatureHelper
                 result.success("hash")
             }
+
             "native_download" -> {
                 val url = call.argument<String>("url")!!
                 val fileName = call.argument<String>("fileName")!!
@@ -353,11 +358,12 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
                 request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
 
-                val downloadManager = activity?.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+                val downloadManager =
+                    activity?.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
                 // enqueue puts the download request in the queue.
                 val downloadId = downloadManager.enqueue(request)
 
-//                result.success(downloadId)
+                result.success(downloadId)
             }
 
             else -> {

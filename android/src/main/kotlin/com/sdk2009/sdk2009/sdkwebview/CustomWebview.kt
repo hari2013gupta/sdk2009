@@ -4,6 +4,7 @@ import android.content.Context
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.webkit.WebChromeClient
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
@@ -19,6 +20,7 @@ class CustomWebView(
     init {
         // Initialize WebView settings
         webView.webViewClient = WebViewClient()
+        webView.webChromeClient = WebChromeClient()
         webView.settings.javaScriptEnabled = true
 
         // Load the initial URL if provided

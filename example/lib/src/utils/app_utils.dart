@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-
+const upiLink1 =
+    'phonepe://upi/pay?pa=112233220@ibl&pn=phonepetest&tid=67890&tr=txn123&tn=payment&am=5000&cu=INR&url';
+const upiLink2 =
+    'gpay://upi/pay?pa=112233220@ibl&pn=gpaytest&tid=67890&tr=txn123&tn=payment&am=5000&cu=INR&url';
+const upiLink3 =
+    'sbipay://upi/pay?pa=112233220@ibl&pn=testLink&tid=67890&tr=txn123&tn=payment&am=5000&cu=INR&url';
 const defaultUpiLink = 'upi://pay?pa=112233220@ibl&am=10&pn=harry&tn=testing&cu=INR';
 // test package names
 const defaultUpiPackage = 'com.whatsapp'; // to handle error

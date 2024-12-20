@@ -234,6 +234,16 @@ The navigation delegate is set to block navigation to the youtube website.
     }
   }
 
+  Future<String> downloadAndViewPdf(String url,
+      {String fileName = "downloaded.pdf"}) async {
+    final result =
+        await plugin.getMethodChannel().invokeMethod('native_pdf_viewer', {
+      'url': url,
+      'fileName': fileName,
+    });
+    return result;
+  }
+
   @override
   Widget build(BuildContext context) {
     userOperation();
@@ -244,18 +254,26 @@ The navigation delegate is set to block navigation to the youtube website.
     // });
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           log('-------::==JS Function Test==::--------');
-          wController.runJavaScriptReturningResult(
-              'window.fLog("---->JS-Log Printing")');
-          wController
-              // .runJavaScriptReturningResult('window.fromFlutter("ok")')
-              .runJavaScriptReturningResult(
-                  'window.fAlert("Loss and found greeting from JS")')
-              // .runJavaScriptReturningResult('window.postSomeMessage("ok1")')
-              .then((onValue) => log('runJsFunctionResponse :: $onValue'))
-              .catchError((onError) => log('runJsFunctionError :: $onError'));
-          log('-------::==JS Function Test End==::--------');
+          // wController.runJavaScriptReturningResult(
+          //     'window.fLog("---->JS-Log Printing")');
+          // wController
+          //     // .runJavaScriptReturningResult('window.fromFlutter("ok")')
+          //     .runJavaScriptReturningResult(
+          //         'window.fAlert("Loss and found greeting from JS")')
+          //     // .runJavaScriptReturningResult('window.postSomeMessage("ok1")')
+          //     .then((onValue) => log('runJsFunctionResponse :: $onValue'))
+          //     .catchError((onError) => log('runJsFunctionError :: $onError'));
+          // log('-------::==JS Function Test End==::--------');
+
+          try {
+            final message = await downloadAndViewPdf(
+                'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf');
+            print(message);
+          } catch (e) {
+            print('Error: $e');
+          }
         },
         child: const Icon(Icons.download),
       ),

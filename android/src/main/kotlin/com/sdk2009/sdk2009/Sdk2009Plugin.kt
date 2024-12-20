@@ -29,7 +29,8 @@ import com.sdk2009.sdk2009.util.Common
 import com.sdk2009.sdk2009.util.SmsConsentUtil
 import com.sdk2009.sdk2009.util.TimeHandler
 import com.sdk2009.sdk2009.util.UpiIntentUtil
-import com.sdk2009.sdk2009.util.WebViewFactory
+import com.sdk2009.sdk2009.sdkwebview.WebViewFactory
+//import com.sdk2009.sdk2009.sdkwebview.CustomWebView
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -39,8 +40,15 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.PluginRegistry
 import org.json.JSONObject
+import java.io.File
+import java.net.URL
 import java.util.*
 
+import androidx.core.content.FileProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /** Sdk2009Plugin
  *
@@ -100,9 +108,9 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
             "sdk2009/webview", WebViewFactory(messenger)
         )
 
-        flutterBinding.platformViewRegistry.registerViewFactory(
-            "sdk2009/customwebview", WebViewFactory(messenger)
-        )
+//        flutterBinding.platformViewRegistry.registerViewFactory(
+//            "sdk2009/customwebview", WebViewFactory(messenger)
+//        )
     }
 
     /// following lines under observation----------------
@@ -364,6 +372,50 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
                 val downloadId = downloadManager.enqueue(request)
 
                 result.success(downloadId)
+            }
+
+            "native_pdf_viewer" -> {
+                val url = call.argument<String>("url") ?: return result.error(
+                    "INVALID_URL",
+                    "URL not provided",
+                    null
+                )
+                val fileName = call.argument<String>("fileName") ?: "downloaded1.pdf"
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        val file = File(appContext?.cacheDir, fileName)
+                        URL(url).openStream().use { input ->
+                            file.outputStream().use { output ->
+                                input.copyTo(output)
+                            }
+                        }
+                        Log.d(TAG_APP, "downloaded filepath-------> ${file.path}")
+
+                        withContext(Dispatchers.Main) {
+                            val uri: Uri = FileProvider.getUriForFile(
+                                appContext!!,
+                                "${appContext!!.packageName}.fileprovider",
+                                file
+                            )
+                            val intent = Intent(Intent.ACTION_VIEW).apply {
+                                setDataAndType(uri, "application/pdf")
+                                flags =
+                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            }
+                            appContext!!.startActivity(intent)
+                            result.success("PDF opened successfully")
+                        }
+                    } catch (e: Exception) {
+                        withContext(Dispatchers.Main) {
+                            result.error(
+                                "DOWNLOAD_VIEW_ERROR",
+                                "Failed to download or view PDF: ${e.message}",
+                                null
+                            )
+                        }
+                    }
+                }
             }
 
             else -> {

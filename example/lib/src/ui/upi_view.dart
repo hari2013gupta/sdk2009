@@ -32,7 +32,6 @@ class _UpiViewState extends State<UpiView> {
         final result = await sdk2009plugin.getAvailableUpiApps();
 
         if (result != null) {
-          log('len=====>  ${result.length}');
           final decode = jsonDecode(result);
 
           return UpiMeta.fromJson(decode);
@@ -48,7 +47,7 @@ class _UpiViewState extends State<UpiView> {
       // We also handle the message potentially returning null.
       String? response;
       try {
-        response = await sdk2009plugin.openUpiIntent(url: defaultUpiLink) ?? '';
+        response = await sdk2009plugin.openUpiIntent(url: upiLink2) ?? '';
         log(response.toString());
       } on Exception catch (e) {
         String error = "OPEN UPI APPS EXCEPTION : $e";
@@ -62,7 +61,7 @@ class _UpiViewState extends State<UpiView> {
       String? result;
       try {
         result = await sdk2009plugin.launchUpiIntent(
-            url: defaultUpiLink, package: googlePackage);
+            url: upiLink2, package: googlePackage);
         log(result.toString());
       } catch (e) {
         String error = "OPEN UPI APPS EXCEPTION : $e";
@@ -84,6 +83,7 @@ class _UpiViewState extends State<UpiView> {
                   onPressed: () =>
                       // sdk2009plugin.getAvailableUpiApps().then((result) {
                       getAvailableUpiApps().then((result) {
+                    log('Length-----> ${result.data.length}');
                     setState(() {
                       upiAppsListAndroid = result.data;
                     });
@@ -119,7 +119,7 @@ class _UpiViewState extends State<UpiView> {
             shrinkWrap: true,
             children: List.generate(upiAppsListAndroid.length, (index) {
               final item = upiAppsListAndroid[index];
-              log('icon--------->  ${item.icon}');
+              log('icon--------->  ${item.name}');
               return ListTile(
                   onTap: () {},
                   contentPadding: const EdgeInsets.symmetric(vertical: 10),

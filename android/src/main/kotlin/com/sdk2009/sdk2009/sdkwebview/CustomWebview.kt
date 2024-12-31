@@ -59,6 +59,7 @@ class CustomWebView(
                 webView.reload()
                 result.success(null)
             }
+            "canGoBack" -> result.success(webView.canGoBack())
             "goBack" -> {
                 if (webView.canGoBack()) {
                     webView.goBack()
@@ -73,6 +74,37 @@ class CustomWebView(
                     webView.evaluateJavascript(script) { value -> result.success(value) }
                 } else {
                     result.error("INVALID_SCRIPT", "Script is null", null)
+                }
+            }
+            "loadHtmlAsset" -> {
+                val assetPath = call.argument<String>("assetPath") ?: ""
+//                val htmlContent = context!!.assets.open(assetPath).bufferedReader().use { it.readText() }
+//                webView.loadDataWithBaseURL(null, htmlContent, "text/html", "UTF-8", null)
+                result.success(null)
+            }
+            "loadHtmlString" -> {
+                val htmlString = call.argument<String>("htmlString") ?: ""
+                webView.loadDataWithBaseURL(null, htmlString, "text/html", "UTF-8", null)
+                result.success(null)
+            }
+            "clearCache" -> {
+                webView.clearCache(true)
+                result.success(null)
+            }
+            "clearLocalStorage" -> {
+                android.webkit.WebStorage.getInstance().deleteAllData()
+                result.success(null)
+            }
+            "getUserAgent" -> result.success(webView.settings.userAgentString)
+            "setUserAgent" -> {
+                val userAgent = call.argument<String>("userAgent") ?: ""
+                webView.settings.userAgentString = userAgent
+                result.success(null)
+            }
+            "runJavaScript" -> {
+                val script = call.argument<String>("script") ?: ""
+                webView.evaluateJavascript(script) { value ->
+                    result.success(value)
                 }
             }
             else -> result.notImplemented()

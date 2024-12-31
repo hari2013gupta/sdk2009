@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sdk2009/sdk2009.dart';
-import 'package:sdk2009/src/ui/native_webview.dart';
+import 'package:sdk2009/src/ui/webview/native_webview.dart';
 import 'package:sdk2009/src/ui/sdk_view.dart';
 import 'package:sdk2009/src/singleton/generic_event_bus.dart';
 import 'package:sdk2009/src/singleton/multi_event_bus.dart';
@@ -12,7 +12,7 @@ import 'package:sdk2009/src/singleton/multi_event_bus.dart';
 import 'sdk2009_platform_interface.dart';
 
 class Sdk2009Internal {
-  showNativeToast(String msg){
+  showNativeToast(String msg) {
     Sdk2009()._showNativeToast(msg);
   }
 }
@@ -136,7 +136,7 @@ class Sdk2009 {
     required CallbackFunction callbackFunction,
     required bool hasPlatformWebView,
   }) async {
-    initializeDotenv();
+    // initializeDotenv();
 
     activate(
         pluginCallback: pluginCallback, callbackFunction: callbackFunction);

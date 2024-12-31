@@ -107,10 +107,6 @@ class Sdk2009Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         flutterBinding.platformViewRegistry.registerViewFactory(
             "sdk2009/webview", WebViewFactory(messenger)
         )
-
-//        flutterBinding.platformViewRegistry.registerViewFactory(
-//            "sdk2009/customwebview", WebViewFactory(messenger)
-//        )
     }
 
     /// following lines under observation----------------
